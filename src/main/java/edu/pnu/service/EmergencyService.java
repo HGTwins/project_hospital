@@ -19,7 +19,7 @@ public class EmergencyService {
 	}
 	
 	// 구로 검색
-	public List<EmergencyLocation> getByGu(String gu) {
-		return locationRepository.getByGu(gu);
+	public List<EmergencyLocation> getBySigungu(String gu) {
+		return locationRepository.getBySigungu(gu);
 	}
 }

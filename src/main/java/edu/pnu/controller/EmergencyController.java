@@ -15,9 +15,9 @@ public class EmergencyController {
 	
 	// 전체 검색 혹은 지역구로 검색
 	@GetMapping("/ERInfo")
-	public ResponseEntity<?> getERInfo(@RequestParam(required = false) String gu) {
-		if (gu != null)
-			return ResponseEntity.ok(emergencyService.getByGu(gu));
+	public ResponseEntity<?> getERInfo(@RequestParam(required = false) String sigungu) {
+		if (sigungu != null)
+			return ResponseEntity.ok(emergencyService.getBySigungu(sigungu));
 		return ResponseEntity.ok(emergencyService.getAll());
 	}
 }

@@ -32,7 +32,8 @@ public class EmergencyLocation {
     private String dutyDivName;
     private String dutyName;
     private String dutyAddr;
-    private String gu;
+    private String sido;
+    private String sigungu;
     private String dutyTel1;
     private String startTime;
     private String endTime;
