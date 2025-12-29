@@ -28,6 +28,16 @@ public class HospitalService {
 		Pageable pageable = PageRequest.of(page, size);
 		return basicInfoRepo.findAll(pageable);
 	}
+	
+	// 전체 병원 수
+	public long countAllHospitals() {
+		return basicInfoRepo.countAllHospitals();
+	}
+	
+	// 시군구별 병원 수
+	public long countHospitalsBySigunguName(String sigunguName) {
+		return basicInfoRepo.countHospitalsBySigunguName(sigunguName);
+	}
 
 	// 위치로 조회
 	public List<BasicInfo> findByLocation(double lon, double lat, int distance){

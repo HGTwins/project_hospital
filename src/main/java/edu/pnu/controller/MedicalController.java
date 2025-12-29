@@ -1,5 +1,7 @@
 package edu.pnu.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +27,18 @@ public class MedicalController {
 	public ResponseEntity<?> medicalDetails(@RequestParam(required = false) String sigunguName,
 		@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
 		if (sigunguName != null) {
-			return ResponseEntity.ok(hospitalService.findBySigunguName(sigunguName));	
+			return ResponseEntity.ok(
+				Map.of(
+						"list", hospitalService.findBySigunguName(sigunguName),
+						"totalCount", hospitalService.countAllHospitals(),
+						"sigunguCount", hospitalService.countHospitalsBySigunguName(sigunguName)
+	            ));	
 		}
-		return ResponseEntity.ok(hospitalService.findAll(page, size));	
+		return ResponseEntity.ok(
+			Map.of(
+	            "list", hospitalService.findAll(page, size),
+	            "totalCount", hospitalService.countAllHospitals()
+	        ));	
 	}
 	
 	// 위치로 조회
@@ -36,6 +47,7 @@ public class MedicalController {
 			@RequestParam(defaultValue = "35") double lat) {
 		return ResponseEntity.ok(hospitalService.findByLocation(lon, lat, 10));
 	}
+	
 	
 	/*
 	// 상세 정보 조회

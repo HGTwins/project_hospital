@@ -18,5 +18,6 @@ public interface OffsetRepository extends JpaRepository<Offset, String> {
                 point(:longitude, :latitude)
             ) <= :distance * 1000
             """, nativeQuery = true)
-    List<BasicInfo> findByLocation(@Param("longitude") double longitude, @Param("latitude") double latitude, @Param("distance") int distance);
+    List<BasicInfo> findByLocation(@Param("longitude") double longitude, @Param("latitude") double latitude,
+    		@Param("distance") int distance);
 }
