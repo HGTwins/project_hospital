@@ -11,8 +11,8 @@ import lombok.*;
 public class Offset {
 
     @Id
-    @Column(name = "care_enc_code", length = 200)
-    private String careEncCode;
+    @Column(name = "hospital_id", length = 200)
+    private Long hospitalId;
 
     @Column(name = "longitude")
     private Double longitude;
@@ -21,10 +21,11 @@ public class Offset {
     private Double latitude;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     @JoinColumn(
-        name = "care_enc_code",
-        insertable = false,
-        updatable = false
+    		name = "hospital_id",
+            insertable = false,
+            updatable = false
     )
     private BasicInfo basicInfo;
 }

@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class BasicInfoDTO {
-
+	
+	private Long hospitalId;
     private String careEncCode;
     private String institutionName;
     private String address;
@@ -19,9 +20,13 @@ public class BasicInfoDTO {
 
     private String typeCode;
     private String typeName;
+    
+    private String sigunguCode;
+    private String sigunguName;
 
     public static BasicInfoDTO from(BasicInfo entity) {
         return BasicInfoDTO.builder()
+        		.hospitalId(entity.getHospitalId())
                 .careEncCode(entity.getCareEncCode())
                 .institutionName(entity.getInstitutionName())
                 .address(entity.getAddress())
@@ -49,6 +54,17 @@ public class BasicInfoDTO {
                         ? entity.getTypeCode().getTypeName() 
                         : null
                 )
+                
+                .sigunguCode(
+                        entity.getSigunguCode() != null 
+                            ? entity.getSigunguCode().getId().getSigunguCode() 
+                            : null
+                    )
+                .sigunguName(
+                        entity.getSigunguCode() != null 
+                            ? entity.getSigunguCode().getSigunguName() 
+                            : null
+                    )
                 .build();
     }
 }

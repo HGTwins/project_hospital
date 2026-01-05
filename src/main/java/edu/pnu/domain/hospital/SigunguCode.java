@@ -14,7 +14,11 @@ public class SigunguCode {
 	
 	@MapsId("sidoCode") 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sido_code")
+    @JoinColumn(
+    		name = "sido_code",
+            insertable = false,
+            updatable = false
+    )
     private SidoCode sidoCode;
 
     @Column(name = "sigungu_name", length = 20, nullable = false)

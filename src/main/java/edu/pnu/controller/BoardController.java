@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class BoardController {
 	private final BoardService boardService;
-
+	
+	// 후기 불러 오기
 	@GetMapping("/review")
 	public ResponseEntity<?> getBoards(Long id, String alias, String username) {
 		Map<String, Object> ret= new HashMap<>();

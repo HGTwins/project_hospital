@@ -1,3 +1,4 @@
+/*
 package edu.pnu;
 
 import java.util.Date;
@@ -41,3 +42,4 @@ public class MemberInit implements ApplicationRunner {
 		}
 	}
 }
+*/

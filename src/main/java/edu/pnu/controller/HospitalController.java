@@ -13,6 +13,12 @@ public class HospitalController {
 		return "index";
 	}
 	
+	// oauth2 로그인
+	@GetMapping("/callback")
+	public String callbackPage() {
+		return "callback";
+	}
+	
 	// 시군구별 페이지
 	@GetMapping("/medicalSigungu")
 	public String medicalSigunguPage() {

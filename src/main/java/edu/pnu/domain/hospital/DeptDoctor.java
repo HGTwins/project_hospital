@@ -16,12 +16,12 @@ public class DeptDoctor {
     @Column(name = "dept_doctor")
     private Integer deptDoctor;
     
-    @MapsId("careEncCode")
+    @MapsId("hospitalId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "care_enc_code",
-        insertable = false,
-        updatable = false
+    		name = "hospital_id",
+            insertable = false,
+            updatable = false
     )
     private BasicInfo basicInfo;
     
@@ -36,7 +36,7 @@ public class DeptDoctor {
     
     @Builder
     public DeptDoctor(BasicInfo basicInfo, DeptCode deptCode, Integer doctorCount) {
-        this.id = new DeptDoctorId(basicInfo.getCareEncCode(), deptCode.getDeptCode());
+        this.id = new DeptDoctorId(basicInfo.getHospitalId(), deptCode.getDeptCode());
         this.basicInfo = basicInfo;
         this.deptCode = deptCode;
         this.deptDoctor = doctorCount;

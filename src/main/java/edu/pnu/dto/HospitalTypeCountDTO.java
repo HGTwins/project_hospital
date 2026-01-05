@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class HospitalTypeCountDTO {
-	private String typeCode;
+	private String typeName;
 	private Long count;
 }

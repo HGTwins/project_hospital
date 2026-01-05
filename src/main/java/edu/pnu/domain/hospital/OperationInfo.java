@@ -16,15 +16,15 @@ public class OperationInfo {
     private Long operationId;
 
     // ===== 실제 FK 컬럼 =====
-    @Column(name = "care_enc_code", length = 200, nullable = false)
-    private String careEncCode;
+    @Column(name = "hospital_id", length = 200, nullable = false)
+    private Long hospitalId;
 
     // ===== 연관관계 (읽기 전용) =====
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "care_enc_code",
-        insertable = false,
-        updatable = false
+    		name = "hospital_id",
+            insertable = false,
+            updatable = false
     )
     private BasicInfo basicInfo;
 

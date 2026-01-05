@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OAuth2 Callback</title>
+<script>
+window.onload= async () => {
+try {
+// 서버로콜백요청
+let response = await fetch("/api/jwtcallback", {
+method: "POST",
+credentials: "include"// 쿠키포함해서전송
+});
+if (response.ok) {
+const jwtToken = response.headers.get("Authorization");
+if (jwtToken) {
+sessionStorage.setItem("jwtToken", jwtToken);
+alert("로그인성공!");
+window.location.href= "/medicalSigungu";
+return;
+}
+} else {
+alert("JWT 검증실패");
+alert("JWT 검증실패");
+}
+} catch(err) {
+console.error(err);
+alert("서버요청오류");
+}
+window.location.href= "/";
+};
+</script>
+</head>
+<body>
+<p>로그인처리중...</p>
+</body>
+</html>

@@ -17,9 +17,9 @@ headers: {
 body: JSON.stringify({ username, password })
 });
 if (response.ok) {
-const jwtToken = response.headers.get('Authorization');
+const jwtToken = response.headers.get("Authorization");
 if (jwtToken) {
-sessionStorage.setItem('jwtToken', jwtToken);
+sessionStorage.setItem("jwtToken", jwtToken);
 alert("로그인성공!");
 window.location.href= "/medicalSigungu"; 
 return;

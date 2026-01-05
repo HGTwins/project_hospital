@@ -32,9 +32,13 @@ public class OAuth2SuccessHandlerWithDB extends OAuth2SuccessHandler {
 		
 		String username = map.get("provider") + "_" + map.get("email");
 		
-		memRepo.save(Member.builder().username(username)
-				.password(encoder.encode("abcd")).role(Role.ROLE_MEMBER)
-				.enabled(true).build());
+		if (!memRepo.existsById(username)) {
+			memRepo.save(Member.builder().username(username)
+					.password(encoder.encode("oauth2-user"))
+					.alias(username)
+					.role(Role.ROLE_MEMBER)
+					.enabled(true).build());
+		}
 		
 		String token = JWTUtil.getJWT(username);
 		

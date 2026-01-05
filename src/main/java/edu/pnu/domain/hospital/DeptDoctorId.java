@@ -17,8 +17,8 @@ import jakarta.persistence.Embeddable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class DeptDoctorId implements Serializable {
-	@Column(name = "care_enc_code")
-    private String careEncCode;
+	@Column(name = "hospital_id")
+    private Long hospitalId;
 	
 	@Column(name = "dept_code")
     private String deptCode;

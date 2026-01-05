@@ -58,6 +58,9 @@ public class SecurityConfig {
 		
 		// jwt 인가 필터 등록
 		http.addFilterBefore(new JWTAuthorizatinoFilter(memberRepo), AuthorizationFilter.class);
+		
+		// oauth2
+		http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2SuccessHandler));
 		return http.build();
 	}
 }

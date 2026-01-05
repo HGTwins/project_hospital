@@ -62,7 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		User user = (User)authResult.getPrincipal();
 		
 		// user 객체를 콘솔에 출력해서 확인
-		System.out.println("[JWTAuthenticationFilter]auth:" + user);
+		// System.out.println("[JWTAuthenticationFilter]auth:" + user);
 		
 		// username으로 JWT 생성
 		String token = JWTUtil.getJWT(user.getUsername());
@@ -76,7 +76,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
-		System.out.println("unsucessfulAuthentication:" + failed);
+		// System.out.println("unsucessfulAuthentication:" + failed);
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	}
 }
