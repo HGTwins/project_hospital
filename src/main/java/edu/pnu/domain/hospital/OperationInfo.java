@@ -15,10 +15,6 @@ public class OperationInfo {
     @Column(name = "operation_id")
     private Long operationId;
 
-    // ===== 실제 FK 컬럼 =====
-    @Column(name = "hospital_id", length = 200, nullable = false)
-    private Long hospitalId;
-
     // ===== 연관관계 (읽기 전용) =====
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

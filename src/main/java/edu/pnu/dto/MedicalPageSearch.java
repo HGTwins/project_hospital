@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MedicalSggSearch {
+public class MedicalPageSearch {
 	private String sidoName;
 	private String sigunguName;
 	private Integer page = 0;

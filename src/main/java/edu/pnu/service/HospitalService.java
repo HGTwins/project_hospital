@@ -8,13 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import edu.pnu.dto.BasicInfoDto;
+import edu.pnu.dto.HospitalDto;
 import edu.pnu.dto.DeptCountDto;
+import edu.pnu.dto.EssentialHospitalDto;
 import edu.pnu.dto.TypeCountDto;
 import edu.pnu.dto.MedicalInfoSearch;
-import edu.pnu.dto.MedicalSggSearch;
+import edu.pnu.dto.MedicalPageSearch;
+import edu.pnu.dto.OperationInfoDto;
 import edu.pnu.dto.MedicalChartSearch;
-import edu.pnu.dto.MedicalScoreSearch;
+import edu.pnu.dto.MedicalCountSearch;
 import edu.pnu.persistence.DeptRepository;
 import edu.pnu.persistence.OperationInfoRepository;
 import edu.pnu.persistence.BasicInfoRepository;
@@ -42,31 +44,31 @@ public class HospitalService {
 	}
 	
 	// 병원 조회
-	public Page<BasicInfoDto> getHospitalInfo(MedicalSggSearch mss) {
-		Pageable pageable = PageRequest.of(mss.getPage(), mss.getSize());
+	public Page<HospitalDto> getHospitalInfo(MedicalPageSearch mps) {
+		Pageable pageable = PageRequest.of(mps.getPage(), mps.getSize());
 		// 전체 병원
-		if (mss.getSidoName() == null && mss.getSigunguName() == null) {
-			return basicRepo.findAll(pageable).map(BasicInfoDto::from);
+		if (mps.getSidoName() == null && mps.getSigunguName() == null) {
+			return basicRepo.findAll(pageable).map(HospitalDto::from);
 		// 시도별 병원
-		} else if (mss.getSidoName() != null && mss.getSigunguName() == null) {
-			return basicRepo.getPageBySidoName(mss.getSidoName(), pageable)
-					.map(BasicInfoDto::from);
+		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
+			return basicRepo.getPageBySidoName(mps.getSidoName(), pageable)
+					.map(HospitalDto::from);
 		// 시도 및 시군구별 병원
 		} else {
-			return basicRepo.getPageBySidoNameAndSigunguName(mss.getSidoName(), mss.getSigunguName(), pageable)
-					.map(BasicInfoDto::from);
+			return basicRepo.getPageBySidoNameAndSigunguName(mps.getSidoName(), mps.getSigunguName(), pageable)
+					.map(HospitalDto::from);
 		}
 	}
 	
 	// 하나만 조회
-	public BasicInfoDto findById(Long hospitalId) {
+	public HospitalDto findById(Long hospitalId) {
 		return basicRepo.findById(hospitalId)
-				.map(BasicInfoDto::from)
+				.map(HospitalDto::from)
 				.orElseThrow(() -> new IllegalArgumentException("해당 병원 없음"));
 	}
 
 	// 위치로 조회
-	public List<BasicInfoDto> getListByLocation(MedicalInfoSearch mis){
+	public List<HospitalDto> getListByLocation(MedicalInfoSearch mis){
 	
 		int limit = switch(mis.getLevel()) {
 			case 1, 2 -> 1000;	// 전국 수준
@@ -75,66 +77,72 @@ public class HospitalService {
 		};
 		
 		Pageable pageable = PageRequest.of(0, limit);
-
+		
 		return basicRepo.getListByLocation(mis.getSwLat(), mis.getNeLat(), mis.getSwLng(), mis.getNeLng(), pageable)
 				.stream()
-				.map(BasicInfoDto::from)
+				.map(HospitalDto::from)
 				.toList();
 	}
 	
 	// 병원 수 (스코어 카드)
-	public Long getCountHospital(MedicalScoreSearch mss) {
+	public Long getCountHospital(MedicalCountSearch mcs) {
 		// 전체
-		if (mss.getSidoName() == null && mss.getSigunguName() == null) {
+		if (mcs.getSidoName() == null && mcs.getSigunguName() == null) {
 			return basicRepo.count();
 		// 시도별
-		} else if (mss.getSidoName() != null && mss.getSigunguName() == null) {
-			return basicRepo.getCountBySidoName(mss.getSidoName());
+		} else if (mcs.getSidoName() != null && mcs.getSigunguName() == null) {
+			return basicRepo.getCountBySidoName(mcs.getSidoName());
 		// 시군구별
 		} else {
-			return basicRepo.getCountBySidoNameAndSigunguName(mss.getSidoName(), mss.getSigunguName());
+			return basicRepo.getCountBySidoNameAndSigunguName(mcs.getSidoName(), mcs.getSigunguName());
 		}
 	}
 	
 	// 필수 의료 수 (스코어 카드)
-	public Long getCountEssential(MedicalScoreSearch mes){
+	public Page<EssentialHospitalDto> getPageEssential(MedicalPageSearch mps){
+		Pageable pageable = PageRequest.of(mps.getPage(), mps.getSize());
 		// 전체
-		if (mes.getSidoName() == null && mes.getSigunguName() == null) {
-			return deptRepo.getCountByAllEssential();
+		if (mps.getSidoName() == null && mps.getSigunguName() == null) {
+			return deptRepo.getPageByAllEssential(pageable);
 		// 시도별
-		} else if (mes.getSidoName() != null && mes.getSigunguName() == null) {
-			return deptRepo.getCountByEssentialAndSidoName(mes.getSidoName());
+		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
+			return deptRepo.getPageByEssentialAndSidoName(mps.getSidoName(), pageable);
 		// 시군구별
 		} else {
-			return deptRepo.getCountByEssentialAndSidoNameAndSigunguName(mes.getSidoName(), mes.getSigunguName());
+			return deptRepo.getPageByEssentialAndSidoNameAndSigunguName(
+					mps.getSidoName(), mps.getSigunguName(), pageable);
 		}
 	}
 	
 	// 일요일/공휴일 진료 병원 수 (스코어 카드)
-	public Long getCountHolidayOpen(MedicalScoreSearch mes) {
+	public Page<OperationInfoDto> getPageHolidayOpen(MedicalPageSearch mps) {
+		Pageable pageable = PageRequest.of(mps.getPage(), mps.getSize());
 		// 전체
-		if (mes.getSidoName() == null && mes.getSigunguName() == null) {
-			return operRepo.getCountAllByHolidayOpen();
+		if (mps.getSidoName() == null && mps.getSigunguName() == null) {
+			return operRepo.getPageAllByHolidayOpen(pageable);
 		// 시도별
-		} else if (mes.getSidoName() != null && mes.getSigunguName() == null) {
-			return operRepo.getCountByHolidayOpenAndSidoName(mes.getSidoName());
+		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
+			return operRepo.getPageByHolidayOpenAndSidoName(mps.getSidoName(), pageable);
 		// 시군구별
 		} else {
-			return operRepo.getCountByHolidayOpenAndSidoNameAndSigunguName(mes.getSidoName(), mes.getSigunguName());
+			return operRepo.getPageByHolidayOpenAndSidoNameAndSigunguName(
+					mps.getSidoName(), mps.getSigunguName(), pageable);
 		}
 	}
 	
 	// 야간 진료 병원 수 (스코어 카드)
-	public Long getCountNightOpen(MedicalScoreSearch mes) {
+	public Page<OperationInfoDto> getPageNightOpen(MedicalPageSearch mps) {
+		Pageable pageable = PageRequest.of(mps.getPage(), mps.getSize());
 		// 전체
-		if (mes.getSidoName() == null && mes.getSigunguName() == null) {
-			return operRepo.getCountAllByNightOpen();
+		if (mps.getSidoName() == null && mps.getSigunguName() == null) {
+			return operRepo.getPageAllByNightOpen(pageable);
 		// 시도별
-		} else if (mes.getSidoName() != null && mes.getSigunguName() == null) {
-			return operRepo.getCountByNightOpenAndSidoName(mes.getSidoName());
+		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
+			return operRepo.getPageByNightOpenAndSidoName(mps.getSidoName(), pageable);
 		// 시군구별
 		} else {
-			return operRepo.getCountByNightOpenAndSidoNameAndSigunguName(mes.getSidoName(), mes.getSigunguName());
+			return operRepo.getPageByNightOpenAndSidoNameAndSigunguName(
+					mps.getSidoName(), mps.getSigunguName(), pageable);
 		}
 	}
 	
@@ -196,5 +204,10 @@ public class HospitalService {
 		}
 		
 		return topList;
+	}
+	
+	// 상세 페이지
+	public OperationInfoDto getByHospitalId(Long hospitalId) {
+		return operRepo.getByHospitalId(hospitalId);
 	}
 }

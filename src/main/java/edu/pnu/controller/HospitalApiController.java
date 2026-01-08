@@ -4,15 +4,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.dto.MedicalInfoSearch;
-import edu.pnu.dto.MedicalSggSearch;
+import edu.pnu.dto.MedicalPageSearch;
 import edu.pnu.dto.MedicalChartSearch;
-import edu.pnu.dto.MedicalScoreSearch;
+import edu.pnu.dto.MedicalCountSearch;
 import edu.pnu.service.HospitalService;
 import edu.pnu.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -44,13 +45,13 @@ public class HospitalApiController {
 	}
 	
 	// 시도 및 시군구명으로 병원 조회
-	@GetMapping("/medicalSigungu")
-	public ResponseEntity<?> medicalSigungu(MedicalSggSearch mss) {
-		return ResponseEntity.ok(hospitalService.getHospitalInfo(mss));
+	@GetMapping("/medicalInfo")
+	public ResponseEntity<?> medicalSigungu(MedicalPageSearch mps) {
+		return ResponseEntity.ok(hospitalService.getHospitalInfo(mps));
 	}
 
 	// 위치로 병원 조회
-	@GetMapping("/medicalInfo")
+	@GetMapping("/medicalLocation")
 	public ResponseEntity<?> medicalInfo(MedicalInfoSearch mis) {
 		return ResponseEntity.ok(hospitalService.getListByLocation(mis));
 	}
@@ -63,26 +64,26 @@ public class HospitalApiController {
 	
 	// 병원 수 (스코어 카드)
 	@GetMapping("/medicalCountHospital")
-	public ResponseEntity<?> medicalCountHospital(MedicalScoreSearch mes) {
+	public ResponseEntity<?> medicalCountHospital(MedicalCountSearch mes) {
 		return ResponseEntity.ok(hospitalService.getCountHospital(mes));
 	}
 	
 	// 필수 의료 수 (스코어 카드)
 	@GetMapping("/medicalEssential")
-	public ResponseEntity<?> medicalEssential(MedicalScoreSearch mes) {
-		return ResponseEntity.ok(hospitalService.getCountEssential(mes));
+	public ResponseEntity<?> medicalEssential(MedicalPageSearch mps) {
+		return ResponseEntity.ok(hospitalService.getPageEssential(mps));
 	}
 	
 	// 일요일/공휴일 진료 병원 수 (스코어 카드)
 	@GetMapping("/medicalHoliday")
-	public ResponseEntity<?> medicalHoliday(MedicalScoreSearch mes) {
-		return ResponseEntity.ok(hospitalService.getCountHolidayOpen(mes));
+	public ResponseEntity<?> medicalHoliday(MedicalPageSearch mps) {
+		return ResponseEntity.ok(hospitalService.getPageHolidayOpen(mps));
 	}
 	
 	// 야간 진료 병원 수 (스코어 카드)
 	@GetMapping("/medicalNight")
-	public ResponseEntity<?> medicalNight(MedicalScoreSearch mes) {
-		return ResponseEntity.ok(hospitalService.getCountNightOpen(mes));
+	public ResponseEntity<?> medicalNight(MedicalPageSearch mps) {
+		return ResponseEntity.ok(hospitalService.getPageNightOpen(mps));
 	}
 	
 	// 병원 유형 수 (차트)
@@ -97,5 +98,9 @@ public class HospitalApiController {
 		return ResponseEntity.ok(hospitalService.getTopNWithOthersByDept(mcs));
 	}
 	
-	// 상세 페이지
+	// 상세 페이지 (+ 리뷰)
+	@GetMapping("/medicalDetail/{hospitalId}")
+	public ResponseEntity<?> medicalDetail(@PathVariable Long hospitalId) {
+		return ResponseEntity.ok(hospitalService.getByHospitalId(hospitalId));
+	}
 }

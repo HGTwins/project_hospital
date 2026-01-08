@@ -1,34 +1,49 @@
 package edu.pnu.persistence;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import edu.pnu.domain.hospital.OperationInfo;
+import edu.pnu.dto.OperationInfoDto;
 
 public interface OperationInfoRepository extends JpaRepository<OperationInfo, Long> {
-	// 전체 일요일/공휴일 진료 병원 수
+	// 상세 페이지
 	@Query("""
-			SELECT COUNT(o)
+			SELECT new edu.pnu.dto.OperationInfoDto(b, o)
 			FROM OperationInfo o
+			JOIN o.basicInfo b
+			WHERE b.hospitalId = :hospitalId
+			""")
+	OperationInfoDto getByHospitalId(Long hospitalId);
+	
+	// 전체 일요일/공휴일 진료 병원
+	@Query("""
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
+			FROM OperationInfo o
+			JOIN o.basicInfo b
 			WHERE o.closedHoliday IS NOT NULL OR o.closedSunday IS NOT NULL
 			""")
-	Long getCountAllByHolidayOpen();
+	Page<OperationInfoDto> getPageAllByHolidayOpen(Pageable pageable);
 
-	// 시도별 일요일/공휴일 진료 병원 수
+	// 시도별 일요일/공휴일 진료 병원
 	@Query("""
-			SELECT COUNT(o)
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
 			FROM OperationInfo o
 			JOIN o.basicInfo b
 			JOIN b.sidoCode sd
 			WHERE sd.sidoName = :sidoName
 			AND (o.closedHoliday IS NOT NULL OR o.closedSunday IS NOT NULL)
 			""")
-	Long getCountByHolidayOpenAndSidoName(@Param("sidoName") String sidoName);
+	Page<OperationInfoDto> getPageByHolidayOpenAndSidoName(
+								@Param("sidoName") String sidoName, Pageable pageable);
 
-	// 시군구별 일요일/공휴일 진료 병원 수
+	// 시군구별 일요일/공휴일 진료 병원
 	@Query("""
-			SELECT COUNT(o)
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
 			FROM OperationInfo o
 			JOIN o.basicInfo b
 			JOIN b.sidoCode sd
@@ -36,13 +51,16 @@ public interface OperationInfoRepository extends JpaRepository<OperationInfo, Lo
 			WHERE sd.sidoName = :sidoName AND sg.sigunguName = :sigunguName
 			AND (o.closedHoliday IS NOT NULL OR o.closedSunday IS NOT NULL)
 			""")
-	Long getCountByHolidayOpenAndSidoNameAndSigunguName(@Param("sidoName") String sidoName,
-			@Param("sigunguName") String sigunguName);
+	Page<OperationInfoDto> getPageByHolidayOpenAndSidoNameAndSigunguName(
+			@Param("sidoName") String sidoName,
+			@Param("sigunguName") String sigunguName,
+			Pageable pageable);
 
 	// 전체 야간 진료 병원 수
 	@Query("""
-			SELECT COUNT(o)
-			FROM OperationInfo o
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
+			FROM OperationInfo o 
+			JOIN o.basicInfo b
 			WHERE o.endMonday >= '18:01'
 			OR o.endTuesday >= '18:01'
 			OR o.endWednesday >= '18:01'
@@ -51,11 +69,11 @@ public interface OperationInfoRepository extends JpaRepository<OperationInfo, Lo
 			OR o.endSaturday >= '18:01'
 			OR o.endSunday >= '18:01'
 			""")
-	Long getCountAllByNightOpen();
+	Page<OperationInfoDto> getPageAllByNightOpen(Pageable pageable);
 
 	// 시도별 일요일/공휴일 진료 병원 수
 	@Query("""
-			SELECT COUNT(o)
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
 			FROM OperationInfo o
 			JOIN o.basicInfo b
 			JOIN b.sidoCode sd
@@ -68,11 +86,12 @@ public interface OperationInfoRepository extends JpaRepository<OperationInfo, Lo
 			OR o.endSaturday >= '18:01'
 			OR o.endSunday >= '18:01')
 			""")
-	Long getCountByNightOpenAndSidoName(@Param("sidoName") String sidoName);
+	Page<OperationInfoDto> getPageByNightOpenAndSidoName(
+			@Param("sidoName") String sidoName, Pageable pageable);
 
 	// 시군구별 일요일/공휴일 진료 병원 수
 	@Query("""
-			SELECT COUNT(o)
+			SELECT DISTINCT new edu.pnu.dto.OperationInfoDto(b, o)
 			FROM OperationInfo o
 			JOIN o.basicInfo b
 			JOIN b.sidoCode sd
@@ -86,6 +105,7 @@ public interface OperationInfoRepository extends JpaRepository<OperationInfo, Lo
 			OR o.endSaturday >= '18:01'
 			OR o.endSunday >= '18:01')
 			""")
-	Long getCountByNightOpenAndSidoNameAndSigunguName(
-				@Param("sidoName") String sidoName, @Param("sigunguName") String sigunguName);
+	Page<OperationInfoDto> getPageByNightOpenAndSidoNameAndSigunguName(
+				@Param("sidoName") String sidoName, @Param("sigunguName") String sigunguName,
+				Pageable pageable);
 }

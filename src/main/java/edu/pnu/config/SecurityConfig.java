@@ -36,7 +36,7 @@ public class SecurityConfig {
 	SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/review/**", "/review/**").authenticated()
+				.requestMatchers("/api/review/**").authenticated()
 				.anyRequest().permitAll());
 		
 		// Form을 이용한 로그인을 사용하지 않겠다는 설정

@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MedicalScoreSearch {
+public class MedicalCountSearch {
 	private String sidoName;
 	private String sigunguName;
 }
