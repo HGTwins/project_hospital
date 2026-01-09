@@ -2,6 +2,8 @@ package edu.pnu.domain.board;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.pnu.domain.hospital.BasicInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,10 +40,9 @@ public class Board {
             insertable = false,
             updatable = false
     )
+    @JsonIgnore
     private BasicInfo basicInfo;
     
-	@Column(nullable = false)
-	private String title;
 	@Column(nullable = false)
 	private String content;
 	@SuppressWarnings("deprecation")
@@ -49,9 +50,10 @@ public class Board {
 	@Column(updatable = false)
 	private Date createDate;
 	@Column(updatable = false)
-	private Long cnt = 0L;
+	private Long cnt;
 	
 	@ManyToOne
 	@JoinColumn(name = "username", nullable = false, updatable = false)
+	@JsonIgnore
 	private Member member;
 }

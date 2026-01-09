@@ -1,5 +1,7 @@
 package edu.pnu.domain.hospital;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +13,7 @@ import lombok.*;
 public class Offset {
 
     @Id
-    @Column(name = "hospital_id", length = 200)
+    @Column(name = "hospital_id")
     private Long hospitalId;
 
     @Column(name = "longitude")
@@ -27,5 +29,6 @@ public class Offset {
             insertable = false,
             updatable = false
     )
+    @JsonIgnore
     private BasicInfo basicInfo;
 }

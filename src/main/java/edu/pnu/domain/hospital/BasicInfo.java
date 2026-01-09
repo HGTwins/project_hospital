@@ -1,5 +1,9 @@
 package edu.pnu.domain.hospital;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.pnu.domain.board.Board;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -72,10 +77,11 @@ public class BasicInfo {
     private SigunguCode sigunguCode;
     
     @OneToOne(mappedBy = "basicInfo", fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "hospital_id",
-        insertable = false,
-        updatable = false
-    )
     private Offset offset;
+    
+    @OneToMany(mappedBy = "basicInfo", fetch = FetchType.LAZY)
+    private List<DeptDoctor> deptDoctors = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "basicInfo", fetch = FetchType.LAZY)
+    private List<Board> boardList = new ArrayList<>();
 }

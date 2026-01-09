@@ -13,25 +13,18 @@ import edu.pnu.dto.TypeCountDto;
 
 public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
 	// 시도명으로 조회
-	@Query("""
-		    SELECT b
-		    FROM BasicInfo b
-		    JOIN b.sidoCode sd
-		    WHERE sd.sidoName = :sidoName
-		""")
-	Page<BasicInfo> getPageBySidoName(@Param("sidoName") String sidoName, Pageable pageable);
+	Page<BasicInfo> findBySidoCodeSidoName(@Param("sidoName") String sidoName, Pageable pageable);
 	
 	// 시도명 및 시군구명으로 조회
-	@Query("""
-		    SELECT b
-		    FROM BasicInfo b
-		    JOIN b.sidoCode sd
-		    JOIN b.sigunguCode sg
-		    WHERE sd.sidoName = :sidoName AND sg.sigunguName = :sigunguName
-		""")
-	Page<BasicInfo> getPageBySidoNameAndSigunguName(@Param("sidoName") String sidoName,
+	Page<BasicInfo> findBySidoCodeSidoNameAndSigunguCodeSigunguName(@Param("sidoName") String sidoName,
 												@Param("sigunguName") String sigunguName,
 												Pageable pageable);
+	// 시도별 병원 수
+	Long countBySidoCodeSidoName(@Param("sidoName") String sidoName);
+		
+	// 시군구별 병원 수
+	Long countBySidoCodeSidoNameAndSigunguCodeSigunguName(
+				@Param("sidoName") String sidoName, @Param("sigunguName") String sigunguName);
 	
 	// 위치로 조회
 	@Query("""
@@ -45,25 +38,6 @@ public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
     List<BasicInfo> getListByLocation(@Param("swLat") double swLat, @Param("neLat") double neLat,
     								@Param("swLng") double swLng, @Param("neLng") double neLng,
     								Pageable pageable);
-	
-	// 시도별 병원 수
-	@Query("""
-			SELECT COUNT(b)
-			FROM BasicInfo b
-            JOIN b.sidoCode sd
-		    WHERE sd.sidoName = :sidoName
-			""")
-	Long getCountBySidoName(@Param("sidoName") String sidoName);
-	
-	// 시군구별 병원 수
-	@Query("""
-			SELECT COUNT(b)
-			FROM BasicInfo b
-            JOIN b.sidoCode sd
-		    JOIN b.sigunguCode sg
-		    WHERE sd.sidoName = :sidoName AND sg.sigunguName = :sigunguName
-			""")
-	Long getCountBySidoNameAndSigunguName(@Param("sidoName") String sidoName, @Param("sigunguName") String sigunguName);
 	
 	// 전체 병원 유형 수
 	@Query("""

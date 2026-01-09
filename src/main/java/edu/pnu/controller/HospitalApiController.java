@@ -98,7 +98,7 @@ public class HospitalApiController {
 		return ResponseEntity.ok(hospitalService.getTopNWithOthersByDept(mcs));
 	}
 	
-	// 상세 페이지 (+ 리뷰)
+	// 상세 페이지
 	@GetMapping("/medicalDetail/{hospitalId}")
 	public ResponseEntity<?> medicalDetail(@PathVariable Long hospitalId) {
 		return ResponseEntity.ok(hospitalService.getByHospitalId(hospitalId));

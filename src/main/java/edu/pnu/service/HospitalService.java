@@ -2,6 +2,7 @@ package edu.pnu.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import edu.pnu.dto.HospitalDto;
+import edu.pnu.domain.hospital.BasicInfo;
 import edu.pnu.dto.DeptCountDto;
 import edu.pnu.dto.EssentialHospitalDto;
 import edu.pnu.dto.TypeCountDto;
@@ -51,11 +53,11 @@ public class HospitalService {
 			return basicRepo.findAll(pageable).map(HospitalDto::from);
 		// 시도별 병원
 		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
-			return basicRepo.getPageBySidoName(mps.getSidoName(), pageable)
+			return basicRepo.findBySidoCodeSidoName(mps.getSidoName(), pageable)
 					.map(HospitalDto::from);
 		// 시도 및 시군구별 병원
 		} else {
-			return basicRepo.getPageBySidoNameAndSigunguName(mps.getSidoName(), mps.getSigunguName(), pageable)
+			return basicRepo.findBySidoCodeSidoNameAndSigunguCodeSigunguName(mps.getSidoName(), mps.getSigunguName(), pageable)
 					.map(HospitalDto::from);
 		}
 	}
@@ -91,27 +93,39 @@ public class HospitalService {
 			return basicRepo.count();
 		// 시도별
 		} else if (mcs.getSidoName() != null && mcs.getSigunguName() == null) {
-			return basicRepo.getCountBySidoName(mcs.getSidoName());
+			return basicRepo.countBySidoCodeSidoName(mcs.getSidoName());
 		// 시군구별
 		} else {
-			return basicRepo.getCountBySidoNameAndSigunguName(mcs.getSidoName(), mcs.getSigunguName());
+			return basicRepo.countBySidoCodeSidoNameAndSigunguCodeSigunguName(mcs.getSidoName(), mcs.getSigunguName());
 		}
 	}
 	
 	// 필수 의료 수 (스코어 카드)
 	public Page<EssentialHospitalDto> getPageEssential(MedicalPageSearch mps){
 		Pageable pageable = PageRequest.of(mps.getPage(), mps.getSize());
+		Page<BasicInfo> essential;
 		// 전체
 		if (mps.getSidoName() == null && mps.getSigunguName() == null) {
-			return deptRepo.getPageByAllEssential(pageable);
+			essential = deptRepo.getPageByAllEssential(pageable);
 		// 시도별
 		} else if (mps.getSidoName() != null && mps.getSigunguName() == null) {
-			return deptRepo.getPageByEssentialAndSidoName(mps.getSidoName(), pageable);
+			essential = deptRepo.getPageByEssentialAndSidoName(mps.getSidoName(), pageable);
 		// 시군구별
 		} else {
-			return deptRepo.getPageByEssentialAndSidoNameAndSigunguName(
-					mps.getSidoName(), mps.getSigunguName(), pageable);
+			essential = deptRepo.getPageByEssentialAndSidoNameAndSigunguName(
+							mps.getSidoName(), mps.getSigunguName(), pageable);
 		}
+		// DTO 변환 및 과목 합치기 (이 예시는 단순화된 로직입니다)
+	    return essential.map(hospital -> {
+	        // 이 병원의 필수 과목 리스트를 가져와서 문자열로 합침 
+	        String deptNames = hospital.getDeptDoctors().stream()
+	            .filter(dd -> List.of("10", "11", "24").contains(dd.getDeptCode().getDeptCode()))
+	            .map(dd -> dd.getDeptCode().getDeptName())
+	            .collect(Collectors.joining(", "));
+	        
+	        return new EssentialHospitalDto(hospital, deptNames);
+	    });
+		
 	}
 	
 	// 일요일/공휴일 진료 병원 수 (스코어 카드)

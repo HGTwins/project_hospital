@@ -1,7 +1,10 @@
 package edu.pnu.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -10,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import edu.pnu.config.filter.JWTAuthenticationFilter;
 import edu.pnu.config.filter.JWTAuthorizatinoFilter;
@@ -36,8 +42,10 @@ public class SecurityConfig {
 	SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/review/**").authenticated()
+//				.requestMatchers("/api/review/**").authenticated()
 				.anyRequest().permitAll());
+		
+		http.cors(cors->cors.configurationSource(corsSource()));
 		
 		// Form을 이용한 로그인을 사용하지 않겠다는 설정
 		// UsernamePasswordAuthenticationFilter 제거
@@ -63,4 +71,16 @@ public class SecurityConfig {
 		http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2SuccessHandler));
 		return http.build();
 	}
+	
+	private CorsConfigurationSource corsSource() {
+		CorsConfiguration config = new CorsConfiguration();
+		config. setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000"));
+		config.addAllowedMethod(CorsConfiguration.ALL);
+		config.addAllowedHeader(CorsConfiguration.ALL);
+		config.setAllowCredentials(true);
+		config.addExposedHeader(HttpHeaders.AUTHORIZATION);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+		}
 }

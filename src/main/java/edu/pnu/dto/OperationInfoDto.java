@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class OperationInfoDto {
-	// 1. 병원 기본 정보 (이미 만드신 DTO 활용)
+	// 1. 병원 기본 정보
     private HospitalDto hospital;
 
     // 2. 주차 및 휴무 정보
