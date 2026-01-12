@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>시군구 조회</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    padding: 40px;
+  }
+  h2 {
+    text-align: center;
+  }
+  button {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  th {
+    background-color: #f0f0f0;
+  }
+</style>
+
+<script>
+//페이지로드시토큰확인
+document.addEventListener("DOMContentLoaded", async function() {
+const token = sessionStorage.getItem("jwtToken");
+const username = sessionStorage.getItem("username");
+// 토큰이없으면로그인페이지로리다이렉트
+if (!token) {
+alert("로그인이필요합니다.");
+window.location.href= "/";
+return;
+}
+try {
+	 const params = new URLSearchParams(window.location.search);
+	  const sidoName = params.get("sidoName");
+	  const sigunguName = params.get("sigunguName");
+    const response = await fetch(`/api/medicalInfo?sidoName=${encodeURIComponent(sidoName)}&sigunguName=${encodeURIComponent(sigunguName)}`, {
+      method: "GET",
+      headers: {
+        "Authorization": token
+      }
+    });
+
+    if (!response.ok) {
+      alert("시군구 조회 실패 (인증 오류 가능)");
+      return;
+    }
+
+    const data = await response.json();
+    renderTable(data.content);
+
+  } catch (e) {
+    alert("서버 통신 오류");
+    console.error(e);
+  }
+});
+
+function logout() {
+if(confirm("정말로그아웃하시겠습니까?")) {
+sessionStorage.removeItem("jwtToken");
+alert("로그아웃되었습니다.");
+window.location.href= "/";
+}
+};
+
+function renderTable(list) {
+  const tbody = document.getElementById("sigunguBody");
+  tbody.innerHTML = "";
+
+  list.forEach(item => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+    	<td>${item.institutionName}</td>
+        <td>${item.address}</td>
+        <td>${item.call ?? "-"}</td>
+        <td>${item.sidoCode?.sidoName ?? "-"}</td>
+        <td>${item.typeCode?.typeName ?? "-"}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+</script>
+</head>
+
+<body>
+  <h2>의료 시군구 조회</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>기관명</th>
+        <th>주소</th>
+        <th>전화번호</th>
+        <th>시도</th>
+        <th>기관 유형</th>
+      </tr>
+    </thead>
+    <tbody id="sigunguBody">
+      <!-- 데이터 표시 영역 -->
+    </tbody>
+  </table>
+</body>
+</html>

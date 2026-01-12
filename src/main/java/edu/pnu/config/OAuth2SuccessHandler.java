@@ -28,9 +28,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			email = (String)((Map<String, Object>)user.getAttribute("response")).get("email");
 		} else if (provider.equalsIgnoreCase("google")) {
 			email = (String)user.getAttributes().get("email");
-		} else if (provider.equalsIgnoreCase("github")) {
-			email = (String)user.getAttributes().get("logid");
-		}
+		} 
 		// System.out.println("[OAuth2SucccessHandler]email:" + email);
 		return Map.of("provider", provider, "email", email);
 	}

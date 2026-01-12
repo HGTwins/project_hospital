@@ -17,17 +17,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-public class BoardController {
+public class BoardApiController {
 	private final BoardService boardService;
 	
-	// 게시글 id로 불러 오기
-	@GetMapping("/review/seq")
-	public ResponseEntity<?> getBoards(@RequestParam(required = false) Long seq) {
-		if (seq == null) {
-			return ResponseEntity.ok(boardService.getBoards()); 
-		} else {
-			return ResponseEntity.ok(boardService.getBoard(seq)); 
-		}
+	// 목록 조회 (페이징 포함)
+	@GetMapping("/review")
+	public ResponseEntity<?> getBoardList(@RequestParam(defaultValue = "0") Integer page,
+	                                      @RequestParam(defaultValue = "10") Integer size) {
+	    return ResponseEntity.ok(boardService.getBoards(page, size));
+	}
+
+	// 단일 상세 조회
+	@GetMapping("/review/{seq}")
+	public ResponseEntity<?> getBoardDetail(@PathVariable Long seq) {
+	    return ResponseEntity.ok(boardService.getBoard(seq));
 	}
 	
 	// 멤버 id로 불러 오기

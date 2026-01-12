@@ -33,7 +33,6 @@ public interface BasicInfoRepository extends JpaRepository<BasicInfo, Long> {
             JOIN b.offset o
             WHERE o.latitude BETWEEN :swLat AND :neLat
             AND o.longitude BETWEEN :swLng AND :neLng
-            ORDER BY function('RAND')
 		""")
     List<BasicInfo> getListByLocation(@Param("swLat") double swLat, @Param("neLat") double neLat,
     								@Param("swLng") double swLng, @Param("neLng") double neLng,

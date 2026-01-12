@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <style>
+        .join-container { width: 300px; margin: 50px auto; }
+        .form-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="join-container">
+    <h2>회원가입</h2>
+    <div class="form-group">
+        <input type="text" id="username" placeholder="아이디(이메일)">
+    </div>
+    <div class="form-group">
+        <input type="password" id="password" placeholder="비밀번호">
+    </div>
+    <div class="form-group">
+        <input type="text" id="alias" placeholder="닉네임">
+    </div>
+    <button onclick="handleJoin()">가입하기</button>
+</div>
+
+<script>
+async function handleJoin() {
+    // 1. 입력값 가져오기
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const alias = document.getElementById('alias').value;
+
+    // 간단한 유효성 검사
+    if(!username || !password || !alias) {
+        alert("모든 필드를 채워주세요.");
+        return;
+    }
+
+    // 2. 서버로 보낼 데이터 객체 생성 (DTO 구조와 맞춰야 함)
+    const joinData = {
+        username: username,
+        password: password,
+        alias: alias
+    };
+
+    try {
+        // 3. API 호출
+        const response = await fetch("/api/join", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(joinData)
+        });
+
+        if (response.ok) {
+            alert("회원가입에 성공했습니다! 로그인 페이지로 이동합니다.");
+            window.location.href = "/login"; // 가입 성공 후 이동
+        } else {
+            const errorMsg = await response.text();
+            alert("회원가입 실패: " + errorMsg);
+        }
+    } catch (error) {
+        console.error("오류 발생:", error);
+        alert("서버 통신 중 오류가 발생했습니다.");
+    }
+}
+</script>
+</body>
+</html>

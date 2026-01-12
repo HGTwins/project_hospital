@@ -13,6 +13,11 @@ public class HospitalController {
 		return "index";
 	}
 	
+	@GetMapping("/join")
+	public String join() {
+		return "join";
+	}
+	
 	// oauth2 로그인
 	@GetMapping("/callback")
 	public String callbackPage() {

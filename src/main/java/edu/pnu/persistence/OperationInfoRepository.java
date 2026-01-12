@@ -18,7 +18,7 @@ public interface OperationInfoRepository extends JpaRepository<OperationInfo, Lo
 			JOIN o.basicInfo b
 			WHERE b.hospitalId = :hospitalId
 			""")
-	OperationInfoDto getByHospitalId(Long hospitalId);
+	OperationInfoDto getByHospitalId(@Param("hospitalId") Long hospitalId);
 	
 	// 전체 일요일/공휴일 진료 병원
 	@Query("""

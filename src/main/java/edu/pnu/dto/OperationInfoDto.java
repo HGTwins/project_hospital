@@ -4,8 +4,10 @@ import edu.pnu.domain.hospital.BasicInfo;
 import edu.pnu.domain.hospital.OperationInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class OperationInfoDto {
 	// 1. 병원 기본 정보
@@ -21,7 +23,7 @@ public class OperationInfoDto {
     private String lunchWeekday;
     private String lunchSaturday;
 
-    // 4. 요일별 마감 시간 (야간 진료 판별 등에 활용)
+    // 4. 요일별 마감 시간 및 시작 시간 (야간 진료 판별 등에 활용)
     private String endMonday;
     private String endTuesday;
     private String endWednesday;
@@ -29,10 +31,18 @@ public class OperationInfoDto {
     private String endFriday;
     private String endSaturday;
     private String endSunday;
+    
+    private String startMonday;
+    private String startTuesday;
+    private String startWednesday;
+    private String startThursday;
+    private String startFriday;
+    private String startSaturday;
+    private String startSunday;
 
     public OperationInfoDto(BasicInfo basicInfo, OperationInfo op) {
         this.hospital = HospitalDto.from(basicInfo);
-
+        
         if (op != null) {
             this.parkingFeeYn = op.getParkingFeeYn();
             this.parkingNote = op.getParkingNote();
@@ -47,6 +57,13 @@ public class OperationInfoDto {
             this.endFriday = op.getEndFriday();
             this.endSaturday = op.getEndSaturday();
             this.endSunday = op.getEndSunday();
+            this.startMonday = op.getStartMonday();
+            this.startTuesday = op.getStartTuesday();
+            this.startWednesday = op.getStartWednesday();
+            this.startThursday = op.getStartThursday();
+            this.startFriday = op.getStartFriday();
+            this.startSaturday = op.getStartSaturday();
+            this.startSunday = op.getStartSunday();
         }
     }
 }

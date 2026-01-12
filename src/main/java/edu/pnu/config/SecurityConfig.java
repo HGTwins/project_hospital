@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -33,16 +32,16 @@ public class SecurityConfig {
 	private final MemberRepository memberRepo;
 	
 	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 	
 	// jwt
 	@Bean
 	SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(auth -> auth
-//				.requestMatchers("/api/review/**").authenticated()
+				.requestMatchers("/api/review/**").authenticated()
 				.anyRequest().permitAll());
 		
 		http.cors(cors->cors.configurationSource(corsSource()));

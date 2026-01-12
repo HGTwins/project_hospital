@@ -99,7 +99,7 @@ public class HospitalApiController {
 	}
 	
 	// 상세 페이지
-	@GetMapping("/medicalDetail/{hospitalId}")
+	@GetMapping("/medicalInfo/{hospitalId}")
 	public ResponseEntity<?> medicalDetail(@PathVariable Long hospitalId) {
 		return ResponseEntity.ok(hospitalService.getByHospitalId(hospitalId));
 	}

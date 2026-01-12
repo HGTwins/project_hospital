@@ -36,5 +36,6 @@ public class Member {
 	private Boolean enabled;
 	
 	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+	@Builder.Default
     private List<Board> boardList = new ArrayList<>();
 }
