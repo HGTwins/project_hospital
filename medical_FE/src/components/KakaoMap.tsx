@@ -139,9 +139,15 @@ export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsCh
     }
   }, [selectedSido, selectedSgg])
 
-  return (
+   return (
     <Map center={{ lat: 36.5, lng: 127.5 }} level={13} minLevel={13} style={{ width: "100%", height: "100%" }}
          onDragEnd={handleDragEnd} ref={mapRef} onIdle={handleIdle}
+         onCreate={(map) => {
+        const bounds = map.getBounds();
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+        onBoundsChange(sw.getLat(), ne.getLat(), sw.getLng(), ne.getLng());
+      }}
          className="border border-gray-200 rounded-md">
       {markers.map(item => <Fragment key={item.hospitalId}><MapMarker position={{lat: item.latitude, lng: item.longitude }} title={item.institutionName} 
                                       image={{src: "/redMarker.png", size: {width: 40, height: 40}}}

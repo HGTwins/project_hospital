@@ -49,11 +49,9 @@ export default function medicalInfoPage() {
   }
 
   // 페이징
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-
-  const [pageChange, setPageChange] = useState<(page?: number, sido?: string, sgg?: string) => Promise<void>>(() => async () => {} // 초기값도 빈 함수를 리턴하는 형태로 설정
-);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [pageChange, setPageChange] = useState<(page?: number, sido?: string, sgg?: string) => Promise<void>>(() => async () => {});
 
   // 병원 수 불러오기
   const fetchHospCount = async(sido?: string, sgg?: string) => {
@@ -78,7 +76,7 @@ export default function medicalInfoPage() {
 
   // 야간진료 운영 병원 수 불러오기
   const fetchNightHospCount = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalNight?page=${page}&size=10`;
+    let url = `http://10.125.121.178:8080/api/medicalNight?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -102,7 +100,7 @@ export default function medicalInfoPage() {
 
   // 공휴일 운영 병원 수 불러오기
   const fetchHolidayHospCount = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalHoliday?page=${page}&size=10`;
+    let url = `http://10.125.121.178:8080/api/medicalHoliday?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -126,7 +124,7 @@ export default function medicalInfoPage() {
 
   // 필수의료 운영 병원 수 불러오기
   const fetchCoreHospCount = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalEssential?page=${page}&size=10`;
+    let url = `http://10.125.121.178:8080/api/medicalEssential?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -199,11 +197,11 @@ export default function medicalInfoPage() {
 
   // 병원 진료과목 불러오기
   const fetchHospDept = async(sido?: string, sgg?: string) => {
-    let url = 'http://10.125.121.178:8080/api/medicalDept';
+    let url = 'http://10.125.121.178:8080/api/medicalDept?topN=5';
     if(sido && sgg) {
-      url += `?sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
+      url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
-      url += `?sidoName=${encodeURIComponent(sido)}`
+      url += `&sidoName=${encodeURIComponent(sido)}`
     }
 
     try{
@@ -235,7 +233,7 @@ export default function medicalInfoPage() {
 
   // 병원 간단정보 불러오기(마커(시군구 선택 시), 모달 창)
   const fetchHospInfo = async (page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalInfo?page=${page}&size=10`
+    let url = `http://10.125.121.178:8080/api/medicalInfo?page=${page}&size=5`
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -318,13 +316,18 @@ export default function medicalInfoPage() {
     if (selectedSido) return;
 
     const filtered = markers.filter(m => m.latitude >= swLat && m.latitude <= neLat && m.longitude >= swLng && m.longitude <= neLng);
-    setDisplayMarker(filtered);
+    // setDisplayMarker(filtered);
+
+    if (JSON.stringify(displayMarker) !== JSON.stringify(filtered)) {
+      setDisplayMarker(filtered);
+    }
   }
 
   const handleModalData = async(type: string) => {
     setModalData([]);
     setIsModalOpen(true);
     setIsLoading(true);
+    setCurrentPage(0);
 
     try {
       switch (type) {
@@ -353,6 +356,7 @@ export default function medicalInfoPage() {
       setIsLoading(false); // 성공하든 실패하든 로딩 종료
     }
   }
+
   const handleDetailView = async (hospitalId: number) => {
     setIsLoading(true);
     setIsModalOpen(true); 
@@ -384,7 +388,7 @@ export default function medicalInfoPage() {
   return (
     <div className="flex min-h-screen xl:h-screen overflow-hidden">
       <SideBar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <div className={`${collapsed ? 'md:pl-16' : 'md:pl-55'} bg-gray-100 relative flex flex-1`}> 
+      <div className={`${collapsed ? 'md:pl-16' : 'md:pl-55'} bg-gray-100 relative flex flex-1 mt-14`}> 
         <main className='flex flex-1 flex-col overflow-hidden'>
           <Header />
           <div className='p-5 flex-1 min-h-0 grid grid-cols-12 grid-rows-[auto_1fr] gap-4'>
@@ -402,7 +406,7 @@ export default function medicalInfoPage() {
                       currentPage={currentPage} totalPages={totalPages} onPageChange={pageChange}/>
               <div className='xl:col-span-4 row-span-2 flex xl:flex-col flex-row min-h-0 gap-4 col-span-12'>
                 <div className='flex-1 min-h-75'>
-                  <Dashboard title="병원 유형별 통계" series={categoryData.series} labels={categoryData.labels} type="pie" />
+                  <Dashboard title="병원 유형별 통계" series={categoryData.series} labels={categoryData.labels} type="donut" />
                 </div>
                 <div className='flex-1 min-h-75'>
                   <Dashboard title='진료 과목별 통계' series={deptData.series} labels={deptData.labels} type="bar"/>

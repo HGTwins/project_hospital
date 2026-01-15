@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react';
 import ReviewSection from '@/components/ReviewSection';
 
-export default function MedicalDetailContent({ hospitalId }: { hospitalId: number }) {
+interface DetailContentProps {
+  hospitalId: number,
+}
+
+export default function DetailContent({ hospitalId }: DetailContentProps) {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -46,18 +50,14 @@ export default function MedicalDetailContent({ hospitalId }: { hospitalId: numbe
     ] : [];
 
     return (
-        <div className="w-full max-w-4xl mx-auto h-full overflow-y-auto p-8 flex flex-col gap-8 bg-white">
-                    {/* 상단 타이틀 */}
-                    <header className="border-b-4 border-blue-500 pb-4">
-                        <h1 className="text-4xl font-black text-gray-800 tracking-tight">
-                            {hospital?.institutionName}
-                        </h1>
-                    </header>
-        
-                    {/* 메인 정보 그리드 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* 왼쪽 컬럼: 기본 정보 */}
-                        <section className="flex flex-col gap-6">
+      <div className="w-full max-w-4xl mx-auto h-full overflow-y-auto p-3 flex flex-col gap-8 bg-white">
+        <header className="border-b-4 border-blue-500 pb-4">
+          <h1 className="text-3xl font-black text-gray-800 tracking-tight">
+            {hospital?.institutionName}
+          </h1>
+        </header>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <section className="flex flex-col gap-6">
                             <div>
                                 <h3 className="text-sm font-bold text-blue-600 uppercase mb-1">주소</h3>
                                 <p className="text-gray-700">{hospital?.address || "정보 없음"}</p>
@@ -120,7 +120,7 @@ export default function MedicalDetailContent({ hospitalId }: { hospitalId: numbe
                     )}
         
                     {/* 리뷰 섹션 */}
-                    <section className="mt-10 pt-10 border-t border-gray-200">
+                    <section className="mt-5 pt-10 border-t border-gray-200">
                         <ReviewSection hospitalId={hospitalId} />
                     </section>
                 </div>
