@@ -29,11 +29,6 @@ public class BoardService {
 		return boardRepo.findAll(pageable).map(BoardDto::from);
 	}
 	
-	// 특정 게시물 불러 오기
-	public BoardDto getBoard(Long seq) {
-		return boardRepo.findById(seq).map(BoardDto::from).get();
-	}
-	
 	// Member id로 불러 오기
 	public Page<BoardDto> findByMemberUsername(BoardMemberSearch bms) {
 		Pageable pageable = PageRequest.of(bms.getPage(), bms.getSize());

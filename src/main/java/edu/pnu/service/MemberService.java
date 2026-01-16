@@ -1,7 +1,8 @@
 package edu.pnu.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,8 +22,9 @@ public class MemberService {
 	private final MemberRepository memberRepo;
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public List<Member> getMembers() {
-		return memberRepo.findAll();
+	public Page<Member> getMembers(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return memberRepo.findAll(pageable);
 	}
 
 	public Member getMember(String username) {

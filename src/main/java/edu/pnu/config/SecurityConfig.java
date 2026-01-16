@@ -42,7 +42,7 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable());
 		http.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/api/review/**").authenticated()
-				.requestMatchers("/api/admin/**", "/admin/**").hasRole("ADMIN")
+				//.requestMatchers("/api/admin/**", "/admin/**").hasRole("ADMIN")
 				.anyRequest().permitAll());
 		
 		http.cors(cors->cors.configurationSource(corsSource()));
@@ -62,7 +62,7 @@ public class SecurityConfig {
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		// jwt 인증 필터 등록
-		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()));
+		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), memberRepo));
 		
 		// jwt 인가 필터 등록
 		http.addFilterBefore(new JWTAuthorizatinoFilter(memberRepo), AuthorizationFilter.class);
@@ -74,15 +74,17 @@ public class SecurityConfig {
 	
 	private CorsConfigurationSource corsSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000", "http://10.125.121.178:3000", "https://nonefficient-lezlie-progressively.ngrok-free.dev"));
+		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000",
+											"http://10.125.121.178:3000", "https://nonefficient-lezlie-progressively.ngrok-free.dev"));
 		config.addAllowedMethod(CorsConfiguration.ALL);
 		config.addAllowedHeader(CorsConfiguration.ALL);
 		config.setAllowCredentials(true);
 		config.addExposedHeader(HttpHeaders.AUTHORIZATION);
 		config.addExposedHeader("role");
 		config.addExposedHeader("username");
+		config.addExposedHeader("alias");
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 		return source;
-		}
+	}
 }

@@ -38,7 +38,7 @@ public class JWTAuthorizatinoFilter extends OncePerRequestFilter {
 			return;
 		}
 		// 토큰에서 username, provider, email 추출.
-		//provider와 email은 OAuth2User가 아니면 null
+		// provider와 email은 OAuth2User가 아니면 null
 		String username = JWTUtil.getClaim(jwtToken, JWTUtil.usernameClaim);
 		String provider = JWTUtil.getClaim(jwtToken, JWTUtil.providerClaim);
 		String email = JWTUtil.getClaim(jwtToken, JWTUtil.emailClaim);		
@@ -64,11 +64,14 @@ public class JWTAuthorizatinoFilter extends OncePerRequestFilter {
 			user = new User(member.getUsername(), member.getPassword(),
 					AuthorityUtils.createAuthorityList(member.getRole().toString()));
 		}
+		
 		// 인증 객체 생성
 		Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+		
 		// SecurityContext에 등록
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		// System.out.println(SecurityContextHolder.getContext().getAuthentication());
+		
 		// SecurityFilterChain의 다음 필터로 이동
 		filterChain.doFilter(request, response);
 	}

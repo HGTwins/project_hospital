@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.pnu.dto.MemberDuplicateDto;
 import edu.pnu.dto.MemberJoinDto;
@@ -28,8 +29,8 @@ public class MemberApiController {
 
 	// 관리자용 모든 멤버 불러오기
 	@GetMapping("/admin/getMembers")
-	public ResponseEntity<?> getMembers() {
-		return ResponseEntity.ok(memberService.getMembers());
+	public ResponseEntity<?> getMembers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		return ResponseEntity.ok(memberService.getMembers(page, size));
 	}
 
 	// 관리자용 특정 멤버 삭제
@@ -50,7 +51,7 @@ public class MemberApiController {
 	public ResponseEntity<?> getMember(@PathVariable String username) {
 		return ResponseEntity.ok(memberService.getMember(username));
 	}
-
+	
 	// 회원가입
 	@PostMapping("/join")
 	public ResponseEntity<?> join(@RequestBody MemberJoinDto dto) {

@@ -68,12 +68,6 @@ public class BoardApiController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
 	    }
 	}
-
-	// 단일 상세 조회
-	@GetMapping("/review/{seq}")
-	public ResponseEntity<?> getBoardDetail(@PathVariable Long seq) {
-	    return ResponseEntity.ok(boardService.getBoard(seq));
-	}
 	
 	// 멤버 id로 불러 오기
 	@GetMapping("/review/memberId/{username}")

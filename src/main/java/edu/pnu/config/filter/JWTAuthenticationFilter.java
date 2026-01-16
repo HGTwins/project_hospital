@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import edu.pnu.domain.board.Member;
+import edu.pnu.persistence.MemberRepository;
 import edu.pnu.util.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +25,7 @@ import tools.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
+	private final MemberRepository memberRepo;
 	
 	// POST / login 요청 시
 	@Override
@@ -60,14 +62,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		// loadUserByUsername에서 만든 객체가 authResult에 담겨져 있다.
 		User user = (User)authResult.getPrincipal();
+		String username = user.getUsername();
 		String role = user.getAuthorities().iterator().next().getAuthority();
-
+		
+		Member member = memberRepo.findById(username).orElseThrow(() -> new RuntimeException("회원 없음"));
+		
 	    // 헤더에 사용자 정보 및 권한 정보 추가
-		response.addHeader("username", user.getUsername());
+		response.addHeader("username", username);
 	    response.addHeader("role", role);
+	    response.addHeader("alias", member.getAlias());
 		
 		// username으로 JWT 생성
-		String token = JWTUtil.getJWT(user.getUsername());
+		String token = JWTUtil.getJWT(username);
 		
 		// Response Header[Authorization]에 JWT를 저장해서 응답
 		response.addHeader(HttpHeaders.AUTHORIZATION, token);
