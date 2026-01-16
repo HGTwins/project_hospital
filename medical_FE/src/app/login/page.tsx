@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; 
+import Header from '@/components/Header';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -80,6 +81,8 @@ export default function LoginPage() {
   }, [])
 
   return (
+    <>
+    <Header />
     <div className='w-full h-screen bg-gray-50 flex flex-col justify-center items-center'>
       <div className='w-1/2 max-w-sm bg-white px-6 py-8 flex flex-col justify-center items-start rounded-xl text-gray-700 border border-gray-200 shadow-md'>
         <h2 className='text-lg font-bold mb-7'>계정에 로그인하세요.</h2>
@@ -121,5 +124,6 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+    </>
   );
 }

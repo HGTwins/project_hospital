@@ -95,7 +95,7 @@ export default function ReviewSection({ hospitalId }: { hospitalId: number }) {
       <div className="w-full p-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg text-center">
         <p className="text-gray-600 mb-2">리뷰를 확인하거나 작성하시려면 로그인하세요.</p>
         <Link 
-          href="/" 
+          href="/login" 
           onClick={() => sessionStorage.setItem("redirectUrl", window.location.pathname)}
           className="text-blue-500 font-bold hover:underline"
         >

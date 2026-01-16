@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Header from '@/components/Header';
 
 export default function JoinPage() {
   const router = useRouter();
@@ -90,6 +91,8 @@ export default function JoinPage() {
   }, [formData.password, formData.confirmPassword]);
 
   return (
+    <>
+    <Header />
     <div className='w-full h-screen bg-gray-50 flex flex-col justify-center items-center'>
       <div className='w-1/2 max-w-md bg-white px-6 py-8 flex flex-col justify-center items-start rounded-xl text-gray-700 border border-gray-200 shadow-md'>
         <h2 className='text-lg font-bold mb-7'>계정 생성하기</h2>
@@ -132,10 +135,11 @@ export default function JoinPage() {
           </div>
           <p className='text-sm text-gray-500 text-center'>
             <span>이미 계정이 있다면? </span>
-            <a href='/' className='font-medium text-[#3BA9D2] hover:underline'>로그인</a>
+            <a href='/login' className='font-medium text-[#3BA9D2] hover:underline'>로그인</a>
           </p>
         </form>
       </div>
     </div>
+    </>
   );
 }
