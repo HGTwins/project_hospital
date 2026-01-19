@@ -56,7 +56,7 @@ function MedicalInfoContent() {
   }
   const deptData = { // 진료 과목 정보(바 차트)
     series: [{name: '병원 수', data: hospDept.map(item => item.count)}],
-    labels: hospDept.map(item => item.deptCode)
+    labels: hospDept.map(item => item.deptCode),
   }
 
   // 페이징 관련 변수
@@ -71,7 +71,7 @@ function MedicalInfoContent() {
 
   // 병원 수 불러오기
   const fetchTotalCount = async(sido?: string, sgg?: string) => {
-    let url = 'https://project-hospital.onrender.com/api/medicalCountHospital';
+    let url = 'http://10.125.121.178:8080/api/medicalCountHospital';
     if(sido && sgg) {
       url += `?sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -92,7 +92,7 @@ function MedicalInfoContent() {
 
   // 야간진료 운영 병원 수 불러오기
   const fetchNightCount = async(sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalNight?`;
+    let url = `http://10.125.121.178:8080/api/medicalNight?`;
     if(sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -113,7 +113,7 @@ function MedicalInfoContent() {
 
   // 공휴일 운영 병원 수 불러오기
   const fetchHolidayCount = async(sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalHoliday?`;
+    let url = `http://10.125.121.178:8080/api/medicalHoliday?`;
     if(sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -134,7 +134,7 @@ function MedicalInfoContent() {
 
   // 필수의료 운영 병원 수 불러오기
   const fetchCoreCount = async(sido?: string, sgg?: string, deptCode?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalEssential?`;
+    let url = `http://10.125.121.178:8080/api/medicalEssential?`;
     if (sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`
     } else if (sido) {
@@ -156,7 +156,7 @@ function MedicalInfoContent() {
   // select 박스의 시도 목록 불러오기
   const fetchSidoList = async() => {
     try{
-      const resp = await fetch('https://project-hospital.onrender.com/api/sidoName');
+      const resp = await fetch('http://10.125.121.178:8080/api/sidoName');
       if(!resp.ok) {
         throw new Error('시도 정보를 불러오는데 실패했습니다!');
       }
@@ -170,7 +170,7 @@ function MedicalInfoContent() {
   // select 박스의 시군구 목록 불러오기
   const fetchSggList = async(sido: string) => {
     try{
-      const resp = await fetch(`https://project-hospital.onrender.com/api/sigunguName?sidoName=${encodeURIComponent(sido)}`);
+      const resp = await fetch(`http://10.125.121.178:8080/api/sigunguName?sidoName=${encodeURIComponent(sido)}`);
       if(!resp.ok) {
         throw new Error('시군구 정보를 불러오는데 실패했습니다!');
       }
@@ -183,7 +183,7 @@ function MedicalInfoContent() {
 
   // 전체 병원 수 - 스코어카드 데이터 불러오기
   const fetchHospInfo = async (page?: number, sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalInfo?page=${page}&size=5`
+    let url = `http://10.125.121.178:8080/api/medicalInfo?page=${page}&size=5`
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -202,7 +202,6 @@ function MedicalInfoContent() {
       const data = await resp.json();
       console.log("서버에서 받은 데이터:", data.content);
       setModalData(data.content || []);
-      setDisplayMarker(data.content || []);
       setTotalPages(data.totalPages || 0);
       setCurrentPage(page!);
     } catch (e) {
@@ -214,7 +213,7 @@ function MedicalInfoContent() {
 
   // 야간진료 - 스코어카드 데이터 불러오기
   const fetchNightHosp = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalNight?page=${page}&size=5`;
+    let url = `http://10.125.121.178:8080/api/medicalNight?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -237,7 +236,7 @@ function MedicalInfoContent() {
 
   // 공휴일 - 스코어카드 데이터 불러오기
   const fetchHolidayHosp = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalHoliday?page=${page}&size=5`;
+    let url = `http://10.125.121.178:8080/api/medicalHoliday?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -260,7 +259,7 @@ function MedicalInfoContent() {
 
   // 필수의료 - 스코어카드 데이터 불러오기
   const fetchCoreHosp = async(page?: number, sido?: string, sgg?: string, deptCode?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalEssential?page=${page}&size=5`;
+    let url = `http://10.125.121.178:8080/api/medicalEssential?page=${page}&size=5`;
     if (sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`
       if(deptCode) {
@@ -290,12 +289,11 @@ function MedicalInfoContent() {
     } finally {
       setIsLoading(false);
     }
-  }
-
+  };
 
   // 병원 유형 불러오기
   const fetchHospCategory = async(sido?: string, sgg?: string) => {
-    let url = 'https://project-hospital.onrender.com/api/medicalType';
+    let url = 'http://10.125.121.178:8080/api/medicalType';
     if(sido && sgg) {
       url += `?sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -312,11 +310,11 @@ function MedicalInfoContent() {
     } catch(error) {
       console.log(error);
     }
-  }
+  };
 
   // 병원 진료과목 불러오기
   const fetchHospDept = async(sido?: string, sgg?: string) => {
-    let url = 'https://project-hospital.onrender.com/api/medicalDept?topN=5';
+    let url = 'http://10.125.121.178:8080/api/medicalDept?topN=5';
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -333,12 +331,12 @@ function MedicalInfoContent() {
     } catch(error) {
       console.log(error);
     }
-  }
+  };
 
   // 병원 위치정보 불러오기(마커, 커스텀 오버레이)
   const fetchHospLocation = async(level?: number) => {
     try{
-      const resp = await fetch(`https://project-hospital.onrender.com/api/medicalLocation?${level}`);
+      const resp = await fetch(`http://10.125.121.178:8080/api/medicalLocation?${level}`);
       if(!resp.ok) {
         throw new Error("병원 위치 정보를 불러오는데 실패했습니다!");
       }
@@ -348,10 +346,10 @@ function MedicalInfoContent() {
     } catch(error) {
       console.error(error);
     }
-  }
+  };
 
   const fetchHospInfo2 = async (sido?: string, sgg?: string) => {
-    let url = `https://project-hospital.onrender.com/api/medicalInfo?size=7000`
+    let url = `http://10.125.121.178:8080/api/medicalInfo?size=10000`
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -468,7 +466,7 @@ function MedicalInfoContent() {
     setSelectedHospId(hospitalId);
     
     try {
-      const resp = await fetch(`https://project-hospital.onrender.com/api/medicalId?hospitalId=${hospitalId}`);
+      const resp = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
       if (!resp.ok) throw new Error("상세 정보 호출 실패");
       const data = await resp.json();
 
@@ -498,7 +496,7 @@ function MedicalInfoContent() {
         setSelectedHospId(hospitalId);
         
         try {
-          const resp = await fetch(`https://project-hospital.onrender.com/api/medicalId?hospitalId=${hospitalId}`);
+          const resp = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
           if (resp.ok) {
             const data = await resp.json();
             setModalData([data]);
@@ -553,13 +551,20 @@ function MedicalInfoContent() {
                    currentPage={currentPage} totalPages={totalPages} onPageChange={pageChange}/>
             <div className='xl:col-span-4 xl:row-span-2 flex xl:flex-col flex-col lg:flex-row min-h-0 gap-4 col-span-12 order-last xl:order-0'>
               <div className='flex-1 min-h-75'>
-                {
-                  categoryData ? <Dashboard title="병원 유형별 통계" series={categoryData.series} labels={categoryData.labels} type="donut" /> : 
-                  <p>정보가 없습니다!</p> 
+                {hospCate && hospCate.length > 0 ?
+                  <Dashboard title="병원 유형별 통계" series={categoryData.series} labels={categoryData.labels} type="donut" /> : 
+                  <div className='bg-white p-5 border border-gray-200 rounded-2xl shadow-sm h-full flex items-center justify-center'>
+                    <p className='text-gray-500 text-center'>📊 병원 유형 정보가 없습니다.</p>
+                  </div> 
                 }
               </div>
               <div className='flex-1 min-h-75'>
-                <Dashboard title='진료 과목별 통계' series={deptData.series} labels={deptData.labels} type="bar"/>
+                {hospDept && hospDept.length > 0 ?
+                  <Dashboard title='진료 과목별 통계' series={deptData.series} labels={deptData.labels} type="bar"/> :
+                  <div className='bg-white p-5 border border-gray-200 rounded-2xl shadow-sm h-full flex items-center justify-center'>
+                    <p className='text-gray-500 text-center'>📊 진료 과목 정보가 없습니다.</p>
+                  </div>
+                }
               </div>
             </div>
             <div className='xl:col-span-8 min-h-0 p-5 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col col-span-12'>

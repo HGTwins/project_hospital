@@ -8,7 +8,7 @@ export default function OAuth2Callback() {
     useEffect(() => {
         const fetchCallback = async () => {
             try {
-                const response = await fetch("https://project-hospital.onrender.com/api/jwtcallback", {
+                const response = await fetch("http://10.125.121.178:8080/api/jwtcallback", {
                     method: "POST",
                     credentials: "include", // 쿠키포함
                 });
@@ -16,29 +16,33 @@ export default function OAuth2Callback() {
                     const params = new URLSearchParams(window.location.search);
                     const username = params.get("username")
 
-        if (token && username) {
-            sessionStorage.setItem("jwtToken", "Bearer " + token);
-            sessionStorage.setItem("username", username);
-            sessionStorage.setItem("role", "ROLE_MEMBER");
+                    const jwtToken = response.headers.get('Authorization');
 
-                    const resp = await fetch(`https://project-hospital.onrender.com/api/getMember/${username}`)
+                    const resp = await fetch(`http://10.125.121.178:8080/api/getMember/${username}`)
                     const data = await resp.json()
                     const alias = data.alias
 
-                try {
-                    const resp = await fetch(`https://nonefficient-lezlie-progressively.ngrok-free.dev/api/getMember/${username}`, {
-                        headers: { 
-                            "Authorization": "Bearer " + token,
-                            "ngrok-skip-browser-warning": "true" // ngrok 경고창 방지
-                        }
-                    });
-                    const data = await resp.json();
-                    sessionStorage.setItem('alias', data.alias);
-                    
-                    router.push('/medicalInfo');
-                } catch (err) {
-                    // alias 정보 못가져와도 로그인은 된 상태이므로 이동 가능
-                    router.push('/medicalInfo');
+                    if (jwtToken) {
+                        sessionStorage.setItem("jwtToken", jwtToken);
+                        sessionStorage.setItem('username', username!);
+                        sessionStorage.setItem("role", "ROLE_MEMBER");
+                        sessionStorage.setItem('alias', alias!);
+                    }
+                    alert("로그인 성공!");
+                    // 로그인 성공 로직 내부
+                    const redirectUrl = sessionStorage.getItem('redirectUrl');
+
+                    if (redirectUrl) {
+                        // 저장된 URL이 있으면 해당 페이지로 이동 후 데이터 삭제
+                        sessionStorage.removeItem('redirectUrl');
+                        router.push(redirectUrl);
+                    } else {
+                        // 저장된 URL이 없으면 기본 페이지(예: 메인)로 이동
+                        router.push('/medicalInfo');
+                    }
+                } else {
+                    alert("JWT 검증 실패");
+                    router.push("/");
                 }
             } catch (err) {
                 alert("서버 요청 오류");

@@ -25,6 +25,7 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
   const searchParams = useSearchParams();
 
   const [selectedDept, setSelectedDept] = useState<string>('전체');
+  const [isFromScoreCard, setIsFromScoreCard] = useState<boolean>(false);
   
   const openModal = (id: number) => {
     // 현재 URL 파라미터를 유지하면서 hospId만 추가/변경
@@ -42,9 +43,6 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
     router.push(pathname);
   }
 
-  // 부서명이 존재하는 데이터인지 확인 (필수의료병원 여부)
-  const hasDeptInfo = useMemo(() => data.some(hosp => hosp.deptName), [data]);
-
   const handleDeptClick = (dept: string) => {
     setSelectedDept(dept);
 
@@ -59,13 +57,6 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
     setSelectedDeptCode(code || null);
   };
 
-  useEffect(() => {
-    if (isOpen && totalPages === 1 && !selectedHospId && data?.[0]) {
-      const singleId = data[0].hospitalId || data[0].hospital?.hospitalId;
-      setSelectedHospId(singleId);
-    }
-  }, [isOpen, data, totalPages]);
-
    useEffect(() => {
     // 즉시 1페이지 데이터 요청
     // 부모로부터 받은 onPageChange(여기선 fetchCoreHospCount)를 호출
@@ -73,17 +64,11 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
   }, [onPageChange])
   
 
-  useEffect(() => {
-    if (isOpen && data?.length === 1 && !selectedHospId) {
-    const singleId = data[0].hospitalId || data[0].hospital?.hospitalId;
-    if (singleId) {
-      setSelectedHospId(singleId);
-    }
-  }
-  }, [isOpen, data, selectedHospId]);
-
   // 진료과목 선택 초기화
   useEffect(() => {
+    if(isOpen) {
+      setIsFromScoreCard(!selectedHospId);
+    }
     if (!isOpen) {
       setSelectedDept('전체');
       setSelectedDeptCode(null);
@@ -98,11 +83,11 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
       <div className="absolute inset-0 bg-black/50 flex justify-center items-center">
         <div className="relative bg-white p-6 rounded-xl w-1/2 h-8/10 shadow-2xl flex flex-col overflow-hidden">
           <div className="flex justify-between items-center mb-4">
-            {selectedHospId && totalPages !== 1 ? 
+            {selectedHospId && isFromScoreCard ? 
               <>
                 <button onClick={() => {setSelectedHospId(null); deleteParams();}} className='cursor-pointer'><img src='../arrow_left.svg'/></button>
                 <button onClick={() => {onClose(); deleteParams();}} className="text-2xl cursor-pointer"><img src='../close.svg' /></button>
-              </> : selectedHospId && totalPages === 1 ?
+              </> : selectedHospId && !isFromScoreCard ?
               <>
                 <div></div>
                 <button onClick={() => {onClose(); deleteParams();}} className="text-2xl cursor-pointer"><img src='../close.svg' /></button>
@@ -114,7 +99,7 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
             }
           </div>
 
-          {!selectedHospId && hasDeptInfo && (
+          {!selectedHospId && title.includes('필수의료') &&
             <div className="flex gap-2 mb-4 p-1 bg-gray-100 rounded-lg">
               {['전체', '소아청소년과', '산부인과'].map((dept) => (
                 <button
@@ -129,10 +114,10 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
                 </button>
               ))}
             </div>
-          )}
+          }
 
           <div className="flex-1 overflow-y-auto p-3">
-            {isLoading || (totalPages === 1 && !selectedHospId) ? 
+            {isLoading ? 
               <div className=" h-full flex-1 flex flex-col justify-center items-center gap-4">
                 <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
                 <p className="text-gray-500 font-medium">데이터를 불러오는 중입니다...</p>
