@@ -8,7 +8,7 @@ export default function OAuth2Callback() {
     useEffect(() => {
         const fetchCallback = async () => {
             try {
-                const response = await fetch("http://10.125.121.178:8080/api/jwtcallback", {
+                const response = await fetch("https://project-hospital.onrender.com/api/jwtcallback", {
                     method: "POST",
                     credentials: "include", // 쿠키포함
                 });
@@ -18,7 +18,7 @@ export default function OAuth2Callback() {
 
                     const jwtToken = response.headers.get('Authorization');
 
-                    const resp = await fetch(`http://10.125.121.178:8080/api/getMember/${username}`)
+                    const resp = await fetch(`https://project-hospital.onrender.com/api/getMember/${username}`)
                     const data = await resp.json()
                     const alias = data.alias
 
@@ -51,5 +51,5 @@ export default function OAuth2Callback() {
         };
         fetchCallback();
     }, []);
-    return <p>로그인 처리 중...</p>;
+    return <></>;
 };

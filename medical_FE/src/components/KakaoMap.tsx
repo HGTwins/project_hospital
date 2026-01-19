@@ -13,10 +13,26 @@ interface KakaoMapProps {
   markers: HospLocation[];
   onBoundsChange: (swLat: number, neLat: number, swLng: number, neLng: number) => void;
   onDetailClick: (id: number) => void;
-  fetchHospCount: (sido?: string, sgg?: string) => Promise<void>; // 병원 수 api 호출
+  setMapAddr: (addr: string) => void;
+  setZoomLevel: (level: number) => void;
+  // 병원 수 api 호출
+  fetchHospCount: (sido?: string, sgg?: string) => Promise<void>;
+  fetchNightCount: (sido?: string, sgg?: string) => Promise<void>;
+  fetchCoreCount: (sido?: string, sgg?: string) => Promise<void>;
+  fetchHoildayCount: (sido?: string, sgg?: string) => Promise<void>;
+  // 차트 api 호출
+  fetchHospCategory: (sido?: string, sgg?: string) => Promise<void>;
+  fetchHospDept: (sido?: string, sgg?: string) => Promise<void>;
+  // 스코어카드 데이터 호출
+  fetchHospInfo: (page?: number, sido?: string, sgg?: string) => Promise<void>;
+  fetchHolidayHosp: (page?: number, sido?: string, sgg?: string) => Promise<void>;
+  onRegionChange: (sido?: string, sgg?: string) => void;
 }
 
-export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsChange, onDetailClick, setSelectedSido, setSelectedSgg, fetchHospCount}: KakaoMapProps) {
+export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsChange, onDetailClick, setSelectedSido, setSelectedSgg, setMapAddr,
+                                  fetchHospCount, fetchNightCount, fetchCoreCount, fetchHoildayCount,
+                                  setZoomLevel, fetchHospCategory, fetchHospDept, fetchHospInfo, fetchHolidayHosp, onRegionChange
+                                  }: KakaoMapProps) {
   const bounds = { // 지도 경계를 벗어나면 돌아가도록 경계 잡기
     sw: { lat: 33.0, lng: 124.0 },
     ne: { lat: 39.0, lng: 132.0 }
@@ -35,6 +51,8 @@ export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsCh
     };
     return map[name] || name;
   };
+  const lastRegionKey = useRef(""); // 이전 지역 정보를 기억할 ref
+
   
   // 현재 지도 위도, 경도의 중심점으로 주소를 확인하는 함수
   const coord2Region = () => {
@@ -83,8 +101,22 @@ export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsCh
 
   // 줌이 변경되었을 때 처리하는 함수
   const handleZoom = () => {
-    if (isMoving.current) return; 
-    coord2Region(); 
+   if (isMoving.current || !mapRef.current) return;
+
+    const level = mapRef.current.getLevel();
+
+    if (level >= 11) { // 줌 레벨이 11 이상(전국 단위)으로 멀어지면
+      isMoving.current = true;
+    
+      setSelectedMarker(null);
+      setSelectedSido('');
+      setSelectedSgg('');
+      setTimeout(() => {
+        isMoving.current = false;
+      }, 500);
+    } else {
+      coord2Region();
+    }
   };
 
   // 주소 정보를 받아 지도를 해당 위치로 이동하는 함수
@@ -117,29 +149,63 @@ export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsCh
     const sw = bounds.getSouthWest();
     const ne = bounds.getNorthEast();
 
-    onBoundsChange(sw.getLat(), ne.getLat(), sw.getLng(), ne.getLng());
+    onBoundsChange(sw.getLat(), ne.getLat(), sw.getLng(), ne.getLng()); // 부모 컴포넌트에 위경도 값을 보냄
 
     // 줌 레벨에 따른 api 호출
     const level = mapRef.current.getLevel();
-    // console.log(level);
+    setZoomLevel(level);
     const center = mapRef.current.getCenter();
     const geoCoder = new kakao.maps.services.Geocoder();
 
     geoCoder.coord2RegionCode(center.getLng(), center.getLat(), (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const region = result.find(r => r.region_type === 'H') || result[0];
+        const refinedSido = refineSidoName(region.region_1depth_name); // ex) '부산광역시' -> '부산' 변환
+        const currentSgg = region.region_2depth_name;
+
+        const currentKey = `${refinedSido}-${currentSgg}-${level}`;
+        
+        if (lastRegionKey.current === currentKey) return; // 이전 지역/레벨과 지금이 같다면 아무것도 하지 않음
+      
+        lastRegionKey.current = currentKey; // 새로운 키 저장
 
         if (level == 10 || level == 9) { // 시도 단위
-          const refinedSido = refineSidoName(region.region_1depth_name); // ex) '부산광역시' -> '부산' 변환
+          setMapAddr(`${region.region_1depth_name}`);
 
           fetchHospCount(refinedSido);
+          fetchNightCount(refinedSido);
+          fetchHoildayCount(refinedSido);
+          fetchCoreCount(refinedSido);
+
+          fetchHospCategory(refinedSido);
+          fetchHospDept(refinedSido);
+
+          onRegionChange(refinedSido);
         } else if (level <= 8) { // 시군구 단위
           const refinedSido = refineSidoName(region.region_1depth_name);
           const currentSgg = region.region_2depth_name;
 
+          setMapAddr(`${refinedSido} ${currentSgg}`);
+
           fetchHospCount(refinedSido, currentSgg);
+          fetchNightCount(refinedSido, currentSgg);
+          fetchHoildayCount(refinedSido, currentSgg);
+          fetchCoreCount(refinedSido, currentSgg);
+
+          fetchHospCategory(refinedSido, currentSgg);
+          fetchHospDept(refinedSido, currentSgg);
+
+          onRegionChange(refinedSido, currentSgg);
         } else if (level >= 11) {
           fetchHospCount(); // 전국 단위일 때, 파라미터없이 호출
+          fetchNightCount();
+          fetchHoildayCount();
+          fetchCoreCount();
+
+          fetchHospCategory();
+          fetchHospDept();
+          
+          onRegionChange();
         }
       }
     });
@@ -166,7 +232,7 @@ export default function KakaoMap({selectedSido, selectedSgg, markers, onBoundsCh
                                       image={{src: "/redMarker.png", size: {width: 40, height: 40}}}
                                       onClick={() => setSelectedMarker(item)} />
       {selectedMarker?.hospitalId === item.hospitalId &&
-        <CustomOverlayMap position={{lat: item.latitude, lng: item.longitude}} yAnchor={1.2}>
+        <CustomOverlayMap position={{lat: item.latitude, lng: item.longitude}} yAnchor={1.2} zIndex={10}>
           <OverlayCard data={item} onClose={() => setSelectedMarker(null)} onDetailClick={onDetailClick} />
         </CustomOverlayMap>}</Fragment>)}
     </Map>

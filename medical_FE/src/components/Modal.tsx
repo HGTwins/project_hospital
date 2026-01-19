@@ -71,13 +71,16 @@ export default function Modal({ title, isOpen, onClose, selectedHospId, setSelec
     // 부모로부터 받은 onPageChange(여기선 fetchCoreHospCount)를 호출
     onPageChange(0);
   }, [onPageChange])
+  
 
   useEffect(() => {
-    if (isOpen && totalPages === 1 && !selectedHospId && data?.[0]) {
-      const singleId = data[0].hospitalId || data[0].hospital?.hospitalId;
+    if (isOpen && data?.length === 1 && !selectedHospId) {
+    const singleId = data[0].hospitalId || data[0].hospital?.hospitalId;
+    if (singleId) {
       setSelectedHospId(singleId);
     }
-  }, [isOpen, data, totalPages]);
+  }
+  }, [isOpen, data, selectedHospId]);
 
   // 진료과목 선택 초기화
   useEffect(() => {

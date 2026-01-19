@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ReviewSection from '@/components/ReviewSection';
 
 interface DetailContentProps {
-    hospitalId: number,
+  hospitalId: number,
 }
 
 export default function DetailContent({ hospitalId }: DetailContentProps) {
@@ -15,12 +15,12 @@ export default function DetailContent({ hospitalId }: DetailContentProps) {
         async function fetchData() {
             setLoading(true);
             try {
-                const resp = await fetch(`http://10.125.121.178:8080/api/medicalInfo/${hospitalId}`);
+                const resp = await fetch(`https://project-hospital.onrender.com/api/medicalInfo/${hospitalId}`);
                 let operation = await resp.json().catch(() => null);
                 let hospital;
 
                 if (!operation) {
-                    const fallback = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
+                    const fallback = await fetch(`https://project-hospital.onrender.com/api/medicalId?hospitalId=${hospitalId}`);
                     hospital = await fallback.json();
                 } else {
                     hospital = operation.hospital;
@@ -36,7 +36,7 @@ export default function DetailContent({ hospitalId }: DetailContentProps) {
     }, [hospitalId]);
 
     if (loading) return <div className="p-10 text-center">상세 정보를 불러오는 중...</div>;
-    if (!data?.hospital) return <div className="p-10 text-center">정보가 없습니다.</div>;
+    if (!data?.hospital) return null;
 
     const { hospital, operation } = data;
     const businessHours = operation ? [

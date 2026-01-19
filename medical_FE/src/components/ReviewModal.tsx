@@ -19,7 +19,7 @@ export default function ReviewModal({ username, onClose, deleteReview, getHeader
     const fetchReviews = async (page: number) => {
         const headers = getHeaders();
         try {
-            const resp = await fetch(`http://10.125.121.178:8080/api/review/memberId/${username}?page=${page}&size=5`, { headers });
+            const resp = await fetch(`https://project-hospital.onrender.com/api/review/memberId/${username}?page=${page}&size=5`, { headers });
             if (resp.ok) {
                 const data = await resp.json();
                 setReviews(data.content || []);

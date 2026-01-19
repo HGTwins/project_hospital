@@ -41,7 +41,7 @@ export default function AdminPage() {
         const headers = getHeaders();
         if (!headers) return;
         try {
-            const resp = await fetch(`http://10.125.121.178:8080/api/admin/getMembers?page=${page}&size=8`, { headers });
+            const resp = await fetch(`https://project-hospital.onrender.com/api/admin/getMembers?page=${page}&size=8`, { headers });
             if (resp.ok) {
                 const data = await resp.json();
                 setMembers(data.content || []);
@@ -55,7 +55,7 @@ export default function AdminPage() {
         const headers = getHeaders();
         if (!headers) return;
         try {
-            const resp = await fetch(`http://10.125.121.178:8080/api/review?page=${page}&size=8`, { headers });
+            const resp = await fetch(`https://project-hospital.onrender.com/api/review?page=${page}&size=8`, { headers });
             if (resp.ok) {
                 const data = await resp.json();
                 setAllReviews(data.content || []);
@@ -74,14 +74,14 @@ export default function AdminPage() {
     const deleteMember = async (username: string) => {
         if (!confirm(`${username} 회원을 삭제하시겠습니까?`)) return;
         const headers = getHeaders();
-        const resp = await fetch(`http://10.125.121.178:8080/api/admin/getMember/${username}`, { method: 'DELETE', headers: headers! });
+        const resp = await fetch(`https://project-hospital.onrender.com/api/admin/getMember/${username}`, { method: 'DELETE', headers: headers! });
         if (resp.ok) { alert("삭제되었습니다."); fetchMembers(0); }
     };
 
     const deleteReview = async (seq: number) => {
         if (!confirm("이 후기를 삭제하시겠습니까?")) return;
         const headers = getHeaders();
-        const resp = await fetch(`http://10.125.121.178:8080/api/review/${seq}`, { method: 'DELETE', headers: headers! });
+        const resp = await fetch(`https://project-hospital.onrender.com/api/review/${seq}`, { method: 'DELETE', headers: headers! });
         if (resp.ok) {
             alert("삭제되었습니다.");
             if (viewType === 'review') fetchAllReviews(0);

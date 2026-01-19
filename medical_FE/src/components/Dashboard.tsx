@@ -66,7 +66,6 @@ export default function Dashboard({title, series, labels, type}: DashboardProps)
       show: type=== 'bar' ? false : true,
       fontSize: '15px',
     },
-    
     labels: labels,
     colors: ['#1E40AF', '#3B82F6', '#60A5FA', '#93C5FD', '#BAE6FD'],
     tooltip: {
@@ -74,7 +73,6 @@ export default function Dashboard({title, series, labels, type}: DashboardProps)
         formatter: (val) => `${val.toLocaleString()}건`
       }
     },
-    
   }
 
   return (

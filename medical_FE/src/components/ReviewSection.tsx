@@ -16,7 +16,7 @@ export default function ReviewSection({ hospitalId }: { hospitalId: number }) {
 
   const fetchReviews = useCallback(async (token: string) => {
     try {
-      const res = await fetch(`http://10.125.121.178:8080/api/review/hospitalId/${hospitalId}`, {
+      const res = await fetch(`https://project-hospital.onrender.com/api/review/hospitalId/${hospitalId}`, {
         headers: { 'Authorization': token.startsWith('Bearer ') ? token : `Bearer ${token}` }
       });
       if (res.ok) {
@@ -45,7 +45,7 @@ export default function ReviewSection({ hospitalId }: { hospitalId: number }) {
     if (!newReview.trim() || !token) return;
     setIsSubmitting(true);
     try {
-      const res = await fetch(`http://10.125.121.178:8080/api/review`, {
+      const res = await fetch(`https://project-hospital.onrender.com/api/review`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default function ReviewSection({ hospitalId }: { hospitalId: number }) {
   const handleUpdate = async (seq: number) => {
     if (!editContent.trim()) return;
     const token = sessionStorage.getItem('jwtToken');
-    const res = await fetch(`http://10.125.121.178:8080/api/review/${seq}`, {
+    const res = await fetch(`https://project-hospital.onrender.com/api/review/${seq}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function ReviewSection({ hospitalId }: { hospitalId: number }) {
   const handleDelete = async (seq: number) => {
     if (!confirm("삭제하시겠습니까?")) return;
     const token = sessionStorage.getItem('jwtToken');
-    const res = await fetch(`http://10.125.121.178:8080/api/review/${seq}`, {
+    const res = await fetch(`https://project-hospital.onrender.com/api/review/${seq}`, {
       method: 'DELETE',
       headers: { 'Authorization': token!.startsWith('Bearer ') ? token! : `Bearer ${token}` }
     });
