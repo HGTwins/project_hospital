@@ -8,7 +8,7 @@ export default function OAuth2Callback() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const username = params.get("username");
-        const jwtToken = params.get("jwtToken");
+        const jwtToken = params.get("token");
 
         const fetchCallback = async () => {
             try {
