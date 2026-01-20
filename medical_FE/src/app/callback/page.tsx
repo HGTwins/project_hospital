@@ -13,7 +13,7 @@ export default function OAuth2Callback() {
         const fetchCallback = async () => {
             console.log(params)
             try {
-                const response = await fetch(`/api/getMember/${username}`);
+                const response = await fetch(`http://10.125.121.178:8080/api/getMember/${username}`);
                 const data = await response.json();
                 const alias = data.alias;
                 if (jwtToken && username) {
