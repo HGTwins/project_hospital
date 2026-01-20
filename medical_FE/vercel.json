@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/proxy/:path*",
-      "destination": "http://mediguide.duckdns.org:8080/:path*"
+      "destination": "http://140.245.77.74:8080/:path*"
     }
   ]
 }

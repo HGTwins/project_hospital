@@ -75,8 +75,7 @@ public class SecurityConfig {
 	private CorsConfigurationSource corsSource() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000", "http://140.245.77.74:8080",
-												"https://project-emergency.vercel.app",
-												"http://mediguide.duckdns.org:8080"));
+												"https://project-emergency.vercel.app", "https://nonefficient-lezlie-progressively.ngrok-free.dev"));
 		config.addAllowedMethod(CorsConfiguration.ALL);
 		config.addAllowedHeader(CorsConfiguration.ALL);
 		config.setAllowCredentials(true);

@@ -113,11 +113,11 @@ export default function LoginPage() {
             <div className="grow border-t border-gray-200"></div>
           </div>
           <div className='flex justify-center gap-4 pt-1'>
-            <a href="/proxy/oauth2/authorization/google"
+            <a href="https://nonefficient-lezlie-progressively.ngrok-free.dev/oauth2/authorization/google"
                className='bg-white rounded-full flex justify-center items-center w-10 h-10 border border-gray-400'>
                 <img src='../google.png' className='w-7 h-7'/>
             </a>
-            <a href="/proxy/oauth2/authorization/naver"
+            <a href="https://nonefficient-lezlie-progressively.ngrok-free.dev/oauth2/authorization/naver"
                className='rounded-full w-10 h-10'>
               <img src='../naver.png' />
             </a>
