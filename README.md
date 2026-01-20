@@ -136,7 +136,7 @@ medical_FE/src/
 
 ## 🎬 동작 영상
 
-<video src='./img/mediguide.mp4'></video>
+https://github.com/user-attachments/assets/acecf341-558e-440c-8244-ce6e9a4b4617
 
 ## 💡 프로젝트 후기
 
