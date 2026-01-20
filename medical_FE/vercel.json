@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/proxy/:path*",
-      "destination": "http://10.125.121.178:8080/:path*"
-    }
-  ]
-}
