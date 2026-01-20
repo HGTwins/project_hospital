@@ -4,7 +4,7 @@
 ## 🚀 프로젝트 소개
 
 - 개발 기간: 2025.12.17 ~ 2026.01.21
-- 기획 배경: 병원 정보는 존재하지만, 사용자가 다양한 조건을 한눈에 비교하기에는 불편함이 있었음. <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 병원 정보를 한 화면에 제공해 탐색 과정의 비효율을 줄이고자 기획
+- 기획 배경: 병원 정보는 존재하지만, 사용자가 다양한 조건을 한눈에 비교하기에는 불편함이 있었음. <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 병원 정보를 한 화면에 제공해 탐색 과정의 비효율을 줄이고자 기획
 - 활용 데이터: [전국의료기관표준데이터](https://www.data.go.kr/data/15096293/standard.do)
 
 ## 🧑 팀원 구성
@@ -16,7 +16,7 @@
 ## 🛠 기술 스택
 
 - Frontend: Next.js, TypeScript, Tailwind CSS, ApexCharts, Kakao Maps SDK
-- Backend: Spring Boot, Java, JWT(OAuth2)
+- Backend: Spring Boot, Java, JWT(OAuth2), JPA, Bean Validation
 - Database: MySQL
 
 ## 📁 프로젝트 구조
@@ -140,5 +140,5 @@ https://github.com/user-attachments/assets/acecf341-558e-440c-8244-ce6e9a4b4617
 
 ## 💡 프로젝트 후기
 
--
--
+- 
+- 
