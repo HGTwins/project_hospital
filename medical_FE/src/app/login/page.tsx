@@ -28,7 +28,7 @@ export default function LoginPage() {
     }
     
     try {
-      const response = await fetch("http://10.125.121.178:8080/login", {
+      const response = await fetch("http://140.245.77.74:8080/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials), 
@@ -39,7 +39,7 @@ export default function LoginPage() {
         const role = response.headers.get('role');
         const username = response.headers.get('username')
 
-        const resp = await fetch(`http://10.125.121.178:8080/api/getMember/${username}`)
+        const resp = await fetch(`/api/getMember/${username}`)
         const data = await resp.json()
         const alias = data.alias
 
@@ -112,7 +112,7 @@ export default function LoginPage() {
             <div className="grow border-t border-gray-200"></div>
           </div>
           <div className='flex justify-center gap-4 pt-1'>
-            <a href="https://nonefficient-lezlie-progressively.ngrok-free.dev/oauth2/authorization/google"
+            <a href="https://noneffiient-lezlie-progressively.ngrok-free.dev/oauth2/authorization/google"
                className='bg-white rounded-full flex justify-center items-center w-10 h-10 border border-gray-400'>
                 <img src='../google.png' className='w-7 h-7'/>
             </a>
