@@ -15,12 +15,12 @@ export default function DetailContent({ hospitalId }: DetailContentProps) {
         async function fetchData() {
             setLoading(true);
             try {
-                const resp = await fetch(`http://10.125.121.178:8080/api/medicalInfo/${hospitalId}`);
+                const resp = await fetch(`http://140.245.77.74:8080/api/medicalInfo/${hospitalId}`);
                 let operation = await resp.json().catch(() => null);
                 let hospital;
 
                 if (!operation) {
-                    const fallback = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
+                    const fallback = await fetch(`http://140.245.77.74:8080/api/medicalId?hospitalId=${hospitalId}`);
                     hospital = await fallback.json();
                 } else {
                     hospital = operation.hospital;

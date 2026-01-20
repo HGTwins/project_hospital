@@ -60,7 +60,7 @@ export default function JoinPage() {
     if (!value) return alert(`${type === 'username' ? '아이디' : '닉네임'}를 입력해주세요.`);
 
     try {
-      const response = await fetch(`https://10.125.121.178:8080/api/check-duplicate?type=${type}&value=${value}`);
+      const response = await fetch(`https://140.245.77.74:8080/api/check-duplicate?type=${type}&value=${value}`);
 
       if (response.ok) {
         if (type === 'username') {
@@ -94,7 +94,7 @@ export default function JoinPage() {
     }
 
     try {
-      const response = await fetch("https://10.125.121.178:8080/api/join", {
+      const response = await fetch("https://140.245.77.74:8080/api/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

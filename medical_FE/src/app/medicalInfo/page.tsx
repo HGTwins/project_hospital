@@ -71,7 +71,7 @@ function MedicalInfoContent() {
 
   // 병원 수 불러오기
   const fetchTotalCount = async(sido?: string, sgg?: string) => {
-    let url = 'http://10.125.121.178:8080/api/medicalCountHospital';
+    let url = 'http://140.245.77.74:8080/api/medicalCountHospital';
     if(sido && sgg) {
       url += `?sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -92,7 +92,7 @@ function MedicalInfoContent() {
 
   // 야간진료 운영 병원 수 불러오기
   const fetchNightCount = async(sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalNight?`;
+    let url = `http://140.245.77.74:8080/api/medicalNight?`;
     if(sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -113,7 +113,7 @@ function MedicalInfoContent() {
 
   // 공휴일 운영 병원 수 불러오기
   const fetchHolidayCount = async(sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalHoliday?`;
+    let url = `http://140.245.77.74:8080/api/medicalHoliday?`;
     if(sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -134,7 +134,7 @@ function MedicalInfoContent() {
 
   // 필수의료 운영 병원 수 불러오기
   const fetchCoreCount = async(sido?: string, sgg?: string, deptCode?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalEssential?`;
+    let url = `http://140.245.77.74:8080/api/medicalEssential?`;
     if (sido && sgg) {
       url += `sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`
     } else if (sido) {
@@ -156,7 +156,7 @@ function MedicalInfoContent() {
   // select 박스의 시도 목록 불러오기
   const fetchSidoList = async() => {
     try{
-      const resp = await fetch('http://10.125.121.178:8080/api/sidoName');
+      const resp = await fetch('http://140.245.77.74:8080/api/sidoName');
       if(!resp.ok) {
         throw new Error('시도 정보를 불러오는데 실패했습니다!');
       }
@@ -170,7 +170,7 @@ function MedicalInfoContent() {
   // select 박스의 시군구 목록 불러오기
   const fetchSggList = async(sido: string) => {
     try{
-      const resp = await fetch(`http://10.125.121.178:8080/api/sigunguName?sidoName=${encodeURIComponent(sido)}`);
+      const resp = await fetch(`http://140.245.77.74:8080/api/sigunguName?sidoName=${encodeURIComponent(sido)}`);
       if(!resp.ok) {
         throw new Error('시군구 정보를 불러오는데 실패했습니다!');
       }
@@ -183,7 +183,7 @@ function MedicalInfoContent() {
 
   // 전체 병원 수 - 스코어카드 데이터 불러오기
   const fetchHospInfo = async (page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalInfo?page=${page}&size=5`
+    let url = `http://140.245.77.74:8080/api/medicalInfo?page=${page}&size=5`
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -213,7 +213,7 @@ function MedicalInfoContent() {
 
   // 야간진료 - 스코어카드 데이터 불러오기
   const fetchNightHosp = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalNight?page=${page}&size=5`;
+    let url = `http://140.245.77.74:8080/api/medicalNight?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -236,7 +236,7 @@ function MedicalInfoContent() {
 
   // 공휴일 - 스코어카드 데이터 불러오기
   const fetchHolidayHosp = async(page?: number, sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalHoliday?page=${page}&size=5`;
+    let url = `http://140.245.77.74:8080/api/medicalHoliday?page=${page}&size=5`;
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -259,7 +259,7 @@ function MedicalInfoContent() {
 
   // 필수의료 - 스코어카드 데이터 불러오기
   const fetchCoreHosp = async(page?: number, sido?: string, sgg?: string, deptCode?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalEssential?page=${page}&size=5`;
+    let url = `http://140.245.77.74:8080/api/medicalEssential?page=${page}&size=5`;
     if (sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`
       if(deptCode) {
@@ -293,7 +293,7 @@ function MedicalInfoContent() {
 
   // 병원 유형 불러오기
   const fetchHospCategory = async(sido?: string, sgg?: string) => {
-    let url = 'http://10.125.121.178:8080/api/medicalType';
+    let url = 'http://140.245.77.74:8080/api/medicalType';
     if(sido && sgg) {
       url += `?sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -314,7 +314,7 @@ function MedicalInfoContent() {
 
   // 병원 진료과목 불러오기
   const fetchHospDept = async(sido?: string, sgg?: string) => {
-    let url = 'http://10.125.121.178:8080/api/medicalDept?topN=5';
+    let url = 'http://140.245.77.74:8080/api/medicalDept?topN=5';
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -336,7 +336,7 @@ function MedicalInfoContent() {
   // 병원 위치정보 불러오기(마커, 커스텀 오버레이)
   const fetchHospLocation = async(level?: number) => {
     try{
-      const resp = await fetch(`http://10.125.121.178:8080/api/medicalLocation?${level}`);
+      const resp = await fetch(`http://140.245.77.74:8080/api/medicalLocation?${level}`);
       if(!resp.ok) {
         throw new Error("병원 위치 정보를 불러오는데 실패했습니다!");
       }
@@ -349,7 +349,7 @@ function MedicalInfoContent() {
   };
 
   const fetchHospInfo2 = async (sido?: string, sgg?: string) => {
-    let url = `http://10.125.121.178:8080/api/medicalInfo?size=10000`
+    let url = `http://140.245.77.74:8080/api/medicalInfo?size=10000`
     if(sido && sgg) {
       url += `&sidoName=${encodeURIComponent(sido)}&sigunguName=${encodeURIComponent(sgg)}`;
     } else if(sido) {
@@ -466,7 +466,7 @@ function MedicalInfoContent() {
     setSelectedHospId(hospitalId);
     
     try {
-      const resp = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
+      const resp = await fetch(`http://140.245.77.74:8080/api/medicalId?hospitalId=${hospitalId}`);
       if (!resp.ok) throw new Error("상세 정보 호출 실패");
       const data = await resp.json();
 
@@ -496,7 +496,7 @@ function MedicalInfoContent() {
         setSelectedHospId(hospitalId);
         
         try {
-          const resp = await fetch(`http://10.125.121.178:8080/api/medicalId?hospitalId=${hospitalId}`);
+          const resp = await fetch(`http://140.245.77.74:8080/api/medicalId?hospitalId=${hospitalId}`);
           if (resp.ok) {
             const data = await resp.json();
             setModalData([data]);
