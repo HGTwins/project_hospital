@@ -74,7 +74,7 @@ public class SecurityConfig {
 	
 	private CorsConfigurationSource corsSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000",
+		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000", "http://140.245.77.74:8080"
 											"http://10.125.121.178:3000", "https://nonefficient-lezlie-progressively.ngrok-free.dev"));
 		config.addAllowedMethod(CorsConfiguration.ALL);
 		config.addAllowedHeader(CorsConfiguration.ALL);
