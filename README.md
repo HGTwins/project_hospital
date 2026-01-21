@@ -11,7 +11,7 @@
 
 | 이현지(Backend) | 김현지(Frontend) |
 |:---:|:---:|
-|<img src ='' width='150' height='150' /> <br /> <a href='https://github.com/maybecocheon'>@maybecocheon</a>|<img src='' width='150' height='150'/> <br /> <a href='https://github.com/guswlrla'>@guswlrla</a>|
+|<img src ='./img/lee.jpg' width='150' height='150' /> <br /> <a href='https://github.com/maybecocheon'>@maybecocheon</a>|<img src='./img/kim.jpg' width='150' height='150'/> <br /> <a href='https://github.com/guswlrla'>@guswlrla</a>|
 
 ## 🛠 기술 스택
 
