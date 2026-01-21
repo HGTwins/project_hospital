@@ -140,5 +140,5 @@ https://github.com/user-attachments/assets/acecf341-558e-440c-8244-ce6e9a4b4617
 
 ## 💡 프로젝트 후기
 
-- 
-- 
+- 이현지:
+- 김현지:
